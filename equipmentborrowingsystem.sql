@@ -1,7 +1,7 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : bdz
+Source Server         : Interview
 Source Server Version : 80017
 Source Host           : localhost:3306
 Source Database       : equipmentborrowingsystem
@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80017
 File Encoding         : 65001
 
-Date: 2021-02-13 16:30:30
+Date: 2021-02-14 21:01:44
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -22,6 +22,10 @@ DROP TABLE IF EXISTS `admin`;
 CREATE TABLE `admin` (
   `id` varchar(31) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Records of admin
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for borrow_apply
@@ -39,6 +43,12 @@ CREATE TABLE `borrow_apply` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
+-- Records of borrow_apply
+-- ----------------------------
+INSERT INTO `borrow_apply` VALUES ('1', '1', '3190105240', '123', 'play', '13845679876', '132');
+INSERT INTO `borrow_apply` VALUES ('2', '1', '3190105240', '1612790000000', 'blablabla...', '13756432456', '1612790001000');
+
+-- ----------------------------
 -- Table structure for equipment
 -- ----------------------------
 DROP TABLE IF EXISTS `equipment`;
@@ -52,6 +62,11 @@ CREATE TABLE `equipment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
+-- Records of equipment
+-- ----------------------------
+INSERT INTO `equipment` VALUES ('1', '龙台摄像机', null, '604800000', '1', '0');
+
+-- ----------------------------
 -- Table structure for id_equipment
 -- ----------------------------
 DROP TABLE IF EXISTS `id_equipment`;
@@ -60,3 +75,7 @@ CREATE TABLE `id_equipment` (
   `equipmentName` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`equipmentID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Records of id_equipment
+-- ----------------------------

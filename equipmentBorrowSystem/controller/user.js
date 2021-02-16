@@ -7,6 +7,10 @@ exports.putBorrowApply = async (body, params) => {
     let reason = body.reason;
     let contactInfo = body.contactInfo;
     let returnTime = body.returnTime;
+
+    // let result = await sso.getUserInformation(accesstoken).then();
+    // let stuID = result.id;
+
     let stuID = 3190105240; // 暂时写死
 
     let longestTime = await models.userModel.getLongestTime(equipmentID);

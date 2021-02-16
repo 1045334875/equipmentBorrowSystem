@@ -18,7 +18,7 @@ exports.putBorrowApply = async (
             "SELECT longestBorrowTime FROM equipment WHERE equipmentID = ?";
         let equipmentParam = [equipmentID];
         let equipmentRes = await conn.query(equipmentSql, equipmentParam);
-        let longestTime = equipmentRes[0][0].longestBorrowTime;z
+        let longestTime = equipmentRes[0][0].longestBorrowTime;
 
         if (returnTime - startTime <= longestTime && returnTime > startTime) {
             let applySql = "INSERT INTO borrow_apply (equipmentID, stuID, startTime, contactInfo, reason, returnTime) VALUE (?, ?, ?, ?, ?, ?)";
@@ -47,9 +47,11 @@ exports.putBorrowApply = async (
 //     returnTime,
 //     stuID) => {
 //     var conn = await pool.getConnection();
-//     let applySql = "INSERT INTO borrow_apply (equipmentID, stuID, startTime, contactInfo, reason, returnTime) VALUE (?, ?, ?, ?, ?, ?)";
-//     let applyParam = [equipmentID, stuID, startTime, contactInfo, reason, returnTime];
-//     let applyRet = await conn.query(applySql, applyParam);
-//     await conn.release();
+//     let equipmentSql =
+//         "SELECT * FROM equipment WHERE equipmentID = ?";
+//     let equipmentParam = [equipmentID];
+//     let equipmentRes = await conn.query(equipmentSql, equipmentParam);
+//     let longestTime = equipmentRes[0][0].longestBorrowTime;
+//     console.log(equipmentRes);
 // }
 // test(1, 123,"play", "13845679876", 132, 3190105240);

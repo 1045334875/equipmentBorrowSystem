@@ -26,9 +26,9 @@ exports.putBorrowApply = async (body, params) => {
         }
     } else if (moduleResult == 400) {
         ret = {
-        errorCode: 400,
-        errorMsg: "参数错误，借用失败",
-        payload: {}
+            errorCode: 400,
+            errorMsg: "参数错误，借用失败",
+            payload: {}
         }
     } else if (!moduleResult) {
         ret = {

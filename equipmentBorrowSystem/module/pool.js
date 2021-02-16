@@ -5,7 +5,7 @@ module.exports = (function(){
         host: 'localhost',
         user: 'root',
         password: 'Apocrypha332528',
-        database: 'equipmentborrowingsystem',
+        database: 'equipmentborrowsystem',
     })
     
     pool.on("connection",function(connection){

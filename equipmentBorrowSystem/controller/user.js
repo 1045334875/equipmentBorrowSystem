@@ -12,7 +12,7 @@ exports.putBorrowApply = async (body, params) => {
     let longestTime = await models.userModel.getLongestTime(equipmentID);
 
     if (returnTime - startTime <= longestTime && returnTime > startTime) {
-        let moduleResult = await models.userModel.putBorrowApply(
+        let modelResult = await models.userModel.putBorrowApply(
             equipmentID,
             startTime,
             reason,
@@ -21,7 +21,7 @@ exports.putBorrowApply = async (body, params) => {
             stuID
         );
 
-        if (moduleResult) {
+        if (modelResult) {
             ret = {
                 errorCode: 200,
                 errorMsg: "借用成功",
@@ -45,6 +45,30 @@ exports.putBorrowApply = async (body, params) => {
             errorCode: 400,
             errorMsg: "参数错误，借用失败",
             payload: {},
+        };
+    }
+
+    return ret;
+};
+
+
+exports.getLongestTime = async (params) => {
+    let ret;
+    let equipmentID = params.equipmentID;
+    let modelResult = await models.userModel.getLongestTime(equipmentID);
+    if (!modelResult) {
+        ret = {
+            errorCode: 400,
+            errorMsg: "操作数据库出错",
+            payload: {},
+        };
+    } else {
+        ret = {
+            errorCode: 200,
+            errorMsg: "最长借用时间查询成功",
+            payload: {
+                longestBorrowTime: modelResult,
+            }
         };
     }
 

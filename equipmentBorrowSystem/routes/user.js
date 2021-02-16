@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 const controller = require("../controller/index")
-const {userController} = controller;  // 如果经常使用controller中的某一个属性，可以用这样的方式减少调用时候代码的长度
-
+const {userController} = controller;  // 解构： 如果经常使用controller中的某一个属性，可以用这样的方式减少调用时候代码的长度
+module.exports = router;
 // req: request res: respond
 router.put("/equipmentID/:equipmentID/borrowApply", async (req, res) => {
   let ret = await userController.putBorrowApply(req.body, req.params);
@@ -10,5 +10,7 @@ router.put("/equipmentID/:equipmentID/borrowApply", async (req, res) => {
   res.send(ret).end();
 })
 
-
-module.exports = router;
+router.get("/equipmentID/:equiomentID/longestBorrowTime", async (req, res) =>{
+  let ret = await userController.getLongestBorrowTime(req.params);
+  res.send(ret).end();
+})

@@ -41,7 +41,7 @@ const mysql = require("mysql2");
 //             return result;
 //         }
 //     } catch (err) {
-//         console.log("putBorrowApply Module Error");
+//         console.log("putBorrowApply Model Error");
 //         return null;
 //     } finally {
 //         await conn.release();
@@ -61,11 +61,14 @@ exports.getLongestTime = async (
             "SELECT longestBorrowTime FROM equipment WHERE equipmentID = ?";
         let equipmentParam = [equipmentID];
         let equipmentRes = await conn.query(equipmentSql, equipmentParam);
+        if (!equipmentRes[0][0]){
+            throw new Error("equipmentID有误");
+        }
         let longestTime = equipmentRes[0][0].longestBorrowTime;
         
         return longestTime;
     } catch (err) {
-        console.log("getLongestTime Model Error");
+        console.log("getLongestTime Model Error" + err);
         return null;
     } finally {
         await conn.release();
@@ -99,7 +102,7 @@ exports.putBorrowApply = async (
         let result = 200;
         return result;
     } catch (err) {
-        console.log("putBorrowApply Model Error");
+        console.log("putBorrowApply Model Error" + err);
         return null;
     } finally {
         await conn.release();
@@ -123,4 +126,4 @@ exports.putBorrowApply = async (
 //     let applyRet = await conn.query(applySql, applyParam);
 //     await conn.release();
 // }
-// test(1, 123,"play", "13845679876", 132, 3190105240);
+// test(1, 123, "play", "13845679876", 132, 3190105240);

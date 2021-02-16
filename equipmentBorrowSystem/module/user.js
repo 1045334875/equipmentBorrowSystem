@@ -21,8 +21,16 @@ exports.putBorrowApply = async (
         let longestTime = equipmentRes[0][0].longestBorrowTime;
 
         if (returnTime - startTime <= longestTime && returnTime > startTime) {
-            let applySql = "INSERT INTO borrow_apply (equipmentID, stuID, startTime, contactInfo, reason, returnTime) VALUE (?, ?, ?, ?, ?, ?)";
-            let applyParam = [equipmentID, stuID, startTime, contactInfo, reason, returnTime];
+            let applySql =
+                "INSERT INTO borrow_apply (equipmentID, stuID, startTime, contactInfo, reason, returnTime) VALUE (?, ?, ?, ?, ?, ?)";
+            let applyParam = [
+                equipmentID,
+                stuID,
+                startTime,
+                contactInfo,
+                reason,
+                returnTime,
+            ];
             let applyRet = await conn.query(applySql, applyParam);
             let result = 200;
             return result;
@@ -30,7 +38,7 @@ exports.putBorrowApply = async (
             let result = 400;
             return result;
         }
-    } catch {
+    } catch (err) {
         console.log("putBorrowApply Module Error");
         return null;
     } finally {

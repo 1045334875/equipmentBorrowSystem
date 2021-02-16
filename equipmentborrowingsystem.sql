@@ -10,7 +10,11 @@ Target Server Type    : MYSQL
 Target Server Version : 80017
 File Encoding         : 65001
 
+<<<<<<< HEAD
 Date: 2021-02-14 21:01:44
+=======
+Date: 2021-02-16 22:26:43
+>>>>>>> main
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -39,8 +43,16 @@ CREATE TABLE `borrow_apply` (
   `reason` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `contactInfo` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `returnTime` bigint(20) DEFAULT NULL,
+  `state` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Records of borrow_apply
+-- ----------------------------
+INSERT INTO `borrow_apply` VALUES ('1', '1', '3190105240', '123', 'play', '13845679876', '132', null);
+INSERT INTO `borrow_apply` VALUES ('2', '1', '3190105240', '1612790000000', 'blablabla...', '13756432456', '1612790001000', null);
+INSERT INTO `borrow_apply` VALUES ('3', '1', '3190105240', '1612790000000', 'blablabla...', '13756432456', '1612790000001', null);
 
 -- ----------------------------
 -- Records of borrow_apply

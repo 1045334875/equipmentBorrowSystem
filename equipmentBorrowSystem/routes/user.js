@@ -1,12 +1,8 @@
 var express = require('express');
 var router = express.Router();
 const controller = require("../controller/index")
-<<<<<<< HEAD
 const {userController} = controller;  // 解构： 如果经常使用controller中的某一个属性，可以用这样的方式减少调用时候代码的长度
 module.exports = router;
-=======
-const {userController} = controller;  // 解构：如果经常使用controller中的某一个属性，可以用这样的方式减少调用时候代码的长度
-
 
 // 中间件，起识别拦截作用
 // 这个中间件一定要放在route文件的最上面：route匹配是【从上到下&&从前到后】的。
@@ -21,7 +17,6 @@ router.use("/", async (req, res, next) => {
   // 如果是admin的拦截？那还要多一步检测管理员身份
 })
 
->>>>>>> main
 // req: request res: respond
 router.put("/equipmentID/:equipmentID/borrowApply", async (req, res) => {
   // console.log("Here!");
@@ -30,12 +25,8 @@ router.put("/equipmentID/:equipmentID/borrowApply", async (req, res) => {
   res.send(ret).end();
 })
 
-<<<<<<< HEAD
 router.get("/equipmentID/:equiomentID/longestBorrowTime", async (req, res) =>{
-  let ret = await userController.getLongestBorrowTime(req.params);
+  console.log("Here!");
+  let ret = await userController.getLongestTime(req.params);
   res.send(ret).end();
 })
-=======
-
-module.exports = router;
->>>>>>> main

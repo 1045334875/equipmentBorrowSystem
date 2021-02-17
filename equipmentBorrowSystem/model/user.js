@@ -1,5 +1,6 @@
 const pool = require("./pool");
 const mysql = require("mysql2");
+//const { getLongestTime } = require("../controller/user");
 
 // 逻辑判断应当放在controller里面，所以应当将model函数拆分成两个
 /* 原始代码 */
@@ -65,7 +66,6 @@ exports.getLongestTime = async (
             throw new Error("equipmentID有误");
         }
         let longestTime = equipmentRes[0][0].longestBorrowTime;
-        
         return longestTime;
     } catch (err) {
         console.log("getLongestTime Model Error" + err);
@@ -112,14 +112,10 @@ exports.putBorrowApply = async (
 
 /* 调试单个sql语句的参考代码 */
 
-// const pool = require("./pool");
+//  const pool = require("./pool");
 // const mysql = require("mysql2");
 // let test = async (equipmentID,
-//     startTime,
-//     reason,
-//     contactInfo,
-//     returnTime,
-//     stuID) => {
+//     ) => {
 //     var conn = await pool.getConnection();
 //     let applySql = "INSERT INTO borrow_apply (equipmentID, stuID, startTime, contactInfo, reason, returnTime) VALUE (?, ?, ?, ?, ?, ?)";
 //     let applyParam = [equipmentID, stuID, startTime, contactInfo, reason, returnTime];
@@ -127,3 +123,33 @@ exports.putBorrowApply = async (
 //     await conn.release();
 // }
 // test(1, 123, "play", "13845679876", 132, 3190105240);
+
+
+
+// const pool = require("./pool");
+// const mysql = require("mysql2");
+// var test = async (
+//     equipmentID
+// ) => {
+//     try {
+//         // 连接数据库
+//         var conn = await pool.getConnection();
+
+//         // 获取最长借用时间
+//         let equipmentSql =
+//             "SELECT longestBorrowTime FROM equipment WHERE equipmentID = ?";
+//         let equipmentParam = [equipmentID];
+//         let equipmentRes = await conn.query(equipmentSql, equipmentParam);
+//         if (!equipmentRes[0][0]){
+//             throw new Error("equipmentID有误");
+//         }
+//         let longestTime = equipmentRes[0][0].longestBorrowTime;
+        
+//         console.log(longestTime);
+//     } catch (err) {
+//         console.log("getLongestTime Model Error" + err);
+//     } finally {
+//         await conn.release();
+//     }
+// };
+// test(1);

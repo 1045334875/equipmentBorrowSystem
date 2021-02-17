@@ -7,12 +7,12 @@ exports.getEquipmentState = async (
 ) => {
     try {
         var conn = await pool.getConnection();
-        //console.log(equipmentID);
+        
         let equipmentSql =
             "SELECT state FROM equipment WHERE equipmentID = ?";
         let equipmentParam = [equipmentID];
         let equipmentRes = await conn.query(equipmentSql, equipmentParam);
-        //console.log(equipmentRes[0][0].state);
+        
         if (!equipmentRes[0][0]) {
             throw new Error("equipmentID有误");
         }

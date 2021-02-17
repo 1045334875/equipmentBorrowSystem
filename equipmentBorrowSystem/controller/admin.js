@@ -54,10 +54,8 @@ exports.getEquipmentOnLoanMsg = async (params) => {
         let { equipmentName, equipmentPicture, isCamera } = modelResultFromEquipment;
         let { stuID, startTime, returnTime, contactInfo } = modelResultFromApply;
 
-        console.log("Already Here!!!");
-
         let name = await models.adminModel.getName(stuID);
-        console.log("name : " + name);
+        
         if (!name) {
             ret = {
                 errorCode: 400,

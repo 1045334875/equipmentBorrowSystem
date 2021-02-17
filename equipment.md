@@ -37,3 +37,19 @@
 ​		equipmentID：设备编号
 
 ​		equipmentName：设备名称
+
+# user_info（个人信息界面）
+
+​		stuID：学号
+
+​		name：姓名
+
+​		department：部门编号
+
+​		departmentname：部门名称
+
+​		position：职位
+
+​		stuPicture：学生照片
+
+​		borrowTime：借用次数

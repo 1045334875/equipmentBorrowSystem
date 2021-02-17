@@ -116,6 +116,52 @@ exports.getEquipmentOnLoanMsgFromApply = async (
     }
 } 
 
+// 获取某人的姓名
+exports.getName = async (
+    stuID
+) => {
+    try {
+        var conn = await pool.getConnection();
+
+        let userSql = "SELECT name FROM user_info WHERE stuID = ?";
+        let userParam = [stuID];
+        let userRes = await conn.query(userSql, userParam);
+
+        if(!userRes) {
+            throw new Error("学号给错啦");
+        }
+
+        return userRes[0][0].name;
+    } catch(err) {
+        console.log("getName Model Error" + err);
+        return null;
+    } finally {
+        await conn.release();
+    }
+}
+
+// 判断某人是否为管理员
+exports.isAdmin = async(
+    id
+) => {
+    try {
+        var conn = await pool.getConnection();
+
+        let adminSql = "SELECT id FROM admin WHERE id = ?";
+        let adminParam = [id];
+        let adminRes = await conn.query(adminSql, adminParam);
+        let ret = 1;
+        
+        if(!adminRes[0][0]) ret = 0;
+        return ret;
+    } catch(err) {
+        console.log("isAdmin Model Error" + err);
+        return null;
+    } finally {
+        await conn.release();
+    }
+}
+
 // const pool = require("./pool");
 // const mysql = require("mysql2");
 // let test = async () => {

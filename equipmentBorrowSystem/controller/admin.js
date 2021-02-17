@@ -1,4 +1,14 @@
 const models = require("../model/index");
+const sso = require("./ssoUtil.js");
+
+exports.adminChecker = async (accesstoken) => {
+    let result = await sso.getUserInformation(accesstoken).then();
+
+    let stuID = result.id;
+    
+    let adminResult = await models.adminModel.isAdmin(stuID);
+    return adminResult;
+}
 
 exports.getEquipmentOnLoan = async () => {
     let ret;
@@ -43,25 +53,35 @@ exports.getEquipmentOnLoanMsg = async (params) => {
 
         let {equipmentName, equipmentPicture, isCamera} = modelResultFromEquipment;
         let {stuID, startTime, returnTime, contactInfo} = modelResultFromApply;
-
-        let result = await sso.getUserInformation(accesstoken).then();
         
+        console.log("Already Here!!!");
 
-        ret = {
-            errorCode: 200,
-            errorMsg: "成功返回该借出设备信息",
-            payload: {
-                equipmentID: equipmentID,
-                equipmentName: equipmentName,
-                equipmentPicture: equipmentPicture,
-                isCamera: isCamera,
-                name: stuID, //暂时返回id
-                stuID: stuID,
-                startTime: startTime,
-                returnTime: returnTime,
-                contactInfo: contactInfo
+        let name = await models.adminModel.getName(stuID);
+        console.log("name : " + name);
+        if(!name) {
+            ret = {
+                errorCode: 400,
+                errorMsg: "user数据库错误",
+                payload: {}
+            }
+        } else {
+            ret = {
+                errorCode: 200,
+                errorMsg: "成功返回该借出设备信息",
+                payload: {
+                    equipmentID: equipmentID,
+                    equipmentName: equipmentName,
+                    equipmentPicture: equipmentPicture,
+                    isCamera: isCamera,
+                    name: name,
+                    stuID: stuID,
+                    startTime: startTime,
+                    returnTime: returnTime,
+                    contactInfo: contactInfo
+                }
             }
         }
+
     }
 
     return ret;

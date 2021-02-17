@@ -12,6 +12,19 @@ router.use("/", async (req, res, next) => {
 //   执行真正接口的代码：next();
 //   如果token不存在，或者过期，或者假的：res.send(message).end();
 //   如果是admin的拦截？那还要多一步检测管理员身份
+    console.log("Already Here !!!");
+    let ret = await adminController.adminChecker(req.headers['access-token']);
+    
+    if(ret == 1) {
+        next();
+    } else {
+        let message = {
+            errorCode: 400,
+            errorMsg: "并非管理员",
+            payload: {}
+        }
+        res.send(message).end();
+    }
 })
 
 router.get("/equipmentOnLoan", async (req, res) => {

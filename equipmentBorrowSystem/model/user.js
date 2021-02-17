@@ -62,11 +62,11 @@ exports.getLongestTime = async (
             "SELECT longestBorrowTime FROM equipment WHERE equipmentID = ?";
         let equipmentParam = [equipmentID];
         let equipmentRes = await conn.query(equipmentSql, equipmentParam);
-        if (!equipmentRes[0][0]){
+        if (!equipmentRes[0][0]) {
             throw new Error("equipmentID有误");
         }
         let longestTime = equipmentRes[0][0].longestBorrowTime;
-        
+
         return longestTime;
     } catch (err) {
         console.log("getLongestTime Model Error" + err);

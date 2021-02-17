@@ -8,12 +8,12 @@ exports.getEquipmentState = async (
     try {
         var conn = await pool.getConnection();
         //console.log(equipmentID);
-        let equipmentSql = 
+        let equipmentSql =
             "SELECT state FROM equipment WHERE equipmentID = ?";
         let equipmentParam = [equipmentID];
         let equipmentRes = await conn.query(equipmentSql, equipmentParam);
         //console.log(equipmentRes[0][0].state);
-        if(!equipmentRes[0][0]) {
+        if (!equipmentRes[0][0]) {
             throw new Error("equipmentID有误");
         }
         let state = equipmentRes[0][0].state;
@@ -31,26 +31,26 @@ exports.getEquipmentOnLoan = async () => {
     try {
         var conn = await pool.getConnection();
 
-        let equipmentSql = 
+        let equipmentSql =
             "SELECT equipmentID, equipmentName, equipmentPicture FROM equipment WHERE state = ?";
         let equipmentParam = [1];
         let equipmentRes = await conn.query(equipmentSql, equipmentParam);
         let len = equipmentRes[0].length;
 
-        let equipmentSql2 = 
+        let equipmentSql2 =
             "SELECT equipmentID, returnTime FROM borrow_apply WHERE state = ?";
         let equipmentParam2 = [1];
         let equipmentRes2 = await conn.query(equipmentSql2, equipmentParam2);
         let len2 = equipmentRes2[0].length;
 
-        if(len != len2) {
+        if (len != len2) {
             throw new Error("数据库出错啦!");
         }
 
-        for(let count = 0; count < len; count ++) {
+        for (let count = 0; count < len; count++) {
             let equipmentID = equipmentRes[0][count].equipmentID;
-            for(let count2 = 0; count2 < len; count2 ++) {
-                if(equipmentID == equipmentRes2[0][count2].equipmentID) {
+            for (let count2 = 0; count2 < len; count2++) {
+                if (equipmentID == equipmentRes2[0][count2].equipmentID) {
                     equipmentRes[0][count].returnTime = equipmentRes2[0][count2].returnTime;
                     break;
                 }
@@ -73,12 +73,12 @@ exports.getEquipmentOnLoanMsgFromEquipment = async (
     try {
         var conn = await pool.getConnection();
 
-        let equipmentSql = 
+        let equipmentSql =
             "SELECT equipmentID, equipmentName, equipmentPicture, isCamera FROM equipment WHERE equipmentID = ?";
         let equipmentParam = [equipmentID];
-        let equipmentRes = await conn.query(equipmentSql,equipmentParam);
+        let equipmentRes = await conn.query(equipmentSql, equipmentParam);
 
-        if(!equipmentRes[0][0]) {
+        if (!equipmentRes[0][0]) {
             throw new Error("equipment equipmentID有误");
         }
 
@@ -89,7 +89,7 @@ exports.getEquipmentOnLoanMsgFromEquipment = async (
     } finally {
         await conn.release();
     }
-} 
+}
 
 // 从borrow_apply表获取某一设备借出设备信息
 exports.getEquipmentOnLoanMsgFromApply = async (
@@ -98,12 +98,12 @@ exports.getEquipmentOnLoanMsgFromApply = async (
     try {
         var conn = await pool.getConnection();
 
-        let equipmentSql = 
+        let equipmentSql =
             "SELECT stuID, startTime, returnTime, contactInfo FROM borrow_apply WHERE equipmentID = ? AND state = ?";
         let equipmentParam = [equipmentID, 1];
-        let equipmentRes = await conn.query(equipmentSql,equipmentParam);
+        let equipmentRes = await conn.query(equipmentSql, equipmentParam);
 
-        if(!equipmentRes[0][0]) {
+        if (!equipmentRes[0][0]) {
             throw new Error("borrow_apply equipmentID有误");
         }
 
@@ -114,7 +114,7 @@ exports.getEquipmentOnLoanMsgFromApply = async (
     } finally {
         await conn.release();
     }
-} 
+}
 
 // 获取某人的姓名
 exports.getName = async (
@@ -127,12 +127,12 @@ exports.getName = async (
         let userParam = [stuID];
         let userRes = await conn.query(userSql, userParam);
 
-        if(!userRes) {
+        if (!userRes) {
             throw new Error("学号给错啦");
         }
 
         return userRes[0][0].name;
-    } catch(err) {
+    } catch (err) {
         console.log("getName Model Error" + err);
         return null;
     } finally {
@@ -141,7 +141,7 @@ exports.getName = async (
 }
 
 // 判断某人是否为管理员
-exports.isAdmin = async(
+exports.isAdmin = async (
     id
 ) => {
     try {
@@ -151,10 +151,10 @@ exports.isAdmin = async(
         let adminParam = [id];
         let adminRes = await conn.query(adminSql, adminParam);
         let ret = 1;
-        
-        if(!adminRes[0][0]) ret = 0;
+
+        if (!adminRes[0][0]) ret = 0;
         return ret;
-    } catch(err) {
+    } catch (err) {
         console.log("isAdmin Model Error" + err);
         return null;
     } finally {

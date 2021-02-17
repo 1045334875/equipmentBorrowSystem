@@ -5,7 +5,7 @@ exports.adminChecker = async (accesstoken) => {
     let result = await sso.getUserInformation(accesstoken).then();
 
     let stuID = result.id;
-    
+
     let adminResult = await models.adminModel.isAdmin(stuID);
     return adminResult;
 }
@@ -18,7 +18,7 @@ exports.getEquipmentOnLoan = async () => {
         ret = {
             errorCode: 200,
             errorMsg: "成功返回已借出设备",
-            payload: {modelResult}
+            payload: { modelResult }
         }
     } else {
         ret = {
@@ -41,7 +41,7 @@ exports.getEquipmentOnLoanMsg = async (params) => {
             errorMsg: "数据库错误",
             payload: {}
         }
-    } else if(onLoan == 0) {
+    } else if (onLoan == 0) {
         ret = {
             errorCode: 400,
             errorMsg: "当前设备未借出",
@@ -51,14 +51,14 @@ exports.getEquipmentOnLoanMsg = async (params) => {
         let modelResultFromEquipment = await models.adminModel.getEquipmentOnLoanMsgFromEquipment(equipmentID);
         let modelResultFromApply = await models.adminModel.getEquipmentOnLoanMsgFromApply(equipmentID);
 
-        let {equipmentName, equipmentPicture, isCamera} = modelResultFromEquipment;
-        let {stuID, startTime, returnTime, contactInfo} = modelResultFromApply;
-        
+        let { equipmentName, equipmentPicture, isCamera } = modelResultFromEquipment;
+        let { stuID, startTime, returnTime, contactInfo } = modelResultFromApply;
+
         console.log("Already Here!!!");
 
         let name = await models.adminModel.getName(stuID);
         console.log("name : " + name);
-        if(!name) {
+        if (!name) {
             ret = {
                 errorCode: 400,
                 errorMsg: "user数据库错误",

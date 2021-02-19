@@ -25,5 +25,16 @@ router.put("/equipmentID/:equipmentID/borrowApply", async (req, res) => {
   res.send(ret).end();
 })
 
+//004.获取个人信息
+router.get("/user/userInfo", async (req, res) => {
+  let ret = await userController.getUserInfo(req.body, req.params);
+  res.send(ret).end();
+})
+
+//005.获取个人正在借用设备信息及归还日期
+router.get("/user/borrowedEquipment", async (req, res) => {
+  let ret = await userController.getBorrowedEquipment(req.body, req.params);
+  res.send(ret).end();
+})
 
 module.exports = router;

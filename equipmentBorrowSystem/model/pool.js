@@ -4,8 +4,8 @@ module.exports = (function(){
     var pool = mysql.createPool({
         host: 'localhost',
         user: 'root',
-        password: 'baodezheng',
-        database: 'equipmentborrowingsystem',
+        password: 'wanshixin',
+        database: 'equipmentborrowsystem2.0',
     })
     
     pool.on("connection",function(connection){

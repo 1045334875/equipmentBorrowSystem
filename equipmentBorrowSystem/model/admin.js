@@ -151,7 +151,7 @@ exports.isAdmin = async (
         let adminParam = [id];
         let adminRes = await conn.query(adminSql, adminParam);
         let ret = 1;
-
+        
         if (!adminRes[0][0]) ret = 0;
         return ret;
     } catch (err) {

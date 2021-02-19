@@ -1,24 +1,45 @@
+const model = require("../model/index");
 const models = require("../model/index");
 const sso = require("./ssoUtil.js");
+const { adminModel } = models;
 
-exports.adminChecker = async (accesstoken) => {
-    let result = await sso.getUserInformation(accesstoken).then();
+exports.tokenChecker = async (accesstoken) => {
+    let flag = 1;
+    let result = await sso.getUserInformation(accesstoken).then().catch(function (err) {
+        flag = 0;
+        return {
+            errorCode: 400,
+            errorMsg: err,
+            payload: {}
+        };
+    }
+    );
+    if(flag) {
+        return {
+            errorCode: 200,
+            errorMsg: "accesstoken正确",
+            payload: result
+        };
+    } else {
+        return result;
+    }
+    
+}
 
-    let stuID = result.id;
-
-    let adminResult = await models.adminModel.isAdmin(stuID);
-    return adminResult;
+exports.isAdmin = async (stuID) => {
+    let result = await adminModel.isAdmin(stuID);
+    return result;
 }
 
 exports.getEquipmentOnLoan = async () => {
     let ret;
-    let modelResult = await models.adminModel.getEquipmentOnLoan();
+    let modelResult = await adminModel.getEquipmentOnLoan();
 
     if (modelResult) {
         ret = {
             errorCode: 200,
             errorMsg: "成功返回已借出设备",
-            payload: { modelResult }
+            payload: modelResult 
         }
     } else {
         ret = {
@@ -33,7 +54,7 @@ exports.getEquipmentOnLoan = async () => {
 exports.getEquipmentOnLoanMsg = async (params) => {
     let ret;
     let equipmentID = params.equipmentID;
-    let onLoan = await models.adminModel.getEquipmentState(equipmentID);
+    let onLoan = await adminModel.getEquipmentState(equipmentID);
 
     if (onLoan == null) {
         ret = {
@@ -48,14 +69,17 @@ exports.getEquipmentOnLoanMsg = async (params) => {
             payload: {}
         }
     } else {
-        let modelResultFromEquipment = await models.adminModel.getEquipmentOnLoanMsgFromEquipment(equipmentID);
-        let modelResultFromApply = await models.adminModel.getEquipmentOnLoanMsgFromApply(equipmentID);
+        let modelResultFromEquipment = await adminModel.getEquipmentOnLoanMsgFromEquipment(equipmentID);
+        let modelResultFromApply = await adminModel.getEquipmentOnLoanMsgFromApply(equipmentID);
 
         let { equipmentName, equipmentPicture, isCamera } = modelResultFromEquipment;
         let { stuID, startTime, returnTime, contactInfo } = modelResultFromApply;
 
-        let name = await models.adminModel.getName(stuID);
-        
+        let name = await adminModel.getName(stuID);
+        let modelResult = modelResultFromEquipment;
+        modelResult.name = name;
+        Object.assign(modelResult, modelResultFromApply);
+
         if (!name) {
             ret = {
                 errorCode: 400,
@@ -66,17 +90,7 @@ exports.getEquipmentOnLoanMsg = async (params) => {
             ret = {
                 errorCode: 200,
                 errorMsg: "成功返回该借出设备信息",
-                payload: {
-                    equipmentID: equipmentID,
-                    equipmentName: equipmentName,
-                    equipmentPicture: equipmentPicture,
-                    isCamera: isCamera,
-                    name: name,
-                    stuID: stuID,
-                    startTime: startTime,
-                    returnTime: returnTime,
-                    contactInfo: contactInfo
-                }
+                payload: modelResult
             }
         }
 

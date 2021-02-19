@@ -116,26 +116,13 @@ exports.getUserInfo = async (
     try {
         //连接数据库
         var conn = await pool.getConnection();
-
+        //SQL查询
         let userSql = 
             "SELECT name, department, departmentName, position, stuPicture, borrowTime FROM user_info WHERE stuID = ?";
         let userParam = [stuID];
         let userRes = await conn.query(userSql, userParam);
-        let name = userRes[0][0].name;
-        let department = userRes[0][0].department;
-        let departmentName = userRes[0][0].departmentName;
-        let position = userRes[0][0].position;
-        let stuPicture = userRes[0][0].stuPicture;
-        let borrowTime = userRes[0][0].borrowTime;
 
-        return {
-            name,
-            department,
-            departmentName,
-            position,
-            stuPicture,
-            borrowTime
-        }
+        return userRes[0][0];
     } catch (err) {
         console.log("getUserInfo Model Error" + err);
         return null;
@@ -150,22 +137,22 @@ exports.getBorrowedEquipment = async (
 ) => {
     try {
         var conn = await pool.getConnection();
-
+        //SQL查询id,开始时间，结束时间
         let equipmentSql = 
             "SELECT equipmentID, startTime, returnTime FROM borrow_apply WHERE stuID = ?";
         let equipmentParam = [stuID];
         let equipmentRes = await conn.query(equipmentSql, equipmentParam);
-        
+        //提取id为数组
         let equipmentID = [];
         for ( let i = 0 ; i < equipmentRes[0].length ; i++) {
             equipmentID[i] = equipmentRes[0][i].equipmentID;
         }
-        
+        //SQL由id数组查询name
         let equipmentNameSql =
             "SELECT equipmentName FROM id_equipment WHERE equipmentID in (?)";
         let equipmentNameParam = [equipmentID];
         let equipmentNameRes = await conn.query(equipmentNameSql, equipmentNameParam);
-
+        //将name合并到对象中
         for ( let i = 0 ; i < equipmentRes[0].length ; i++) {
             equipmentRes[0][i].equipmentName = equipmentNameRes[0][i].equipmentName;
         }
@@ -179,7 +166,34 @@ exports.getBorrowedEquipment = async (
     }
 };
 
-
+//归还设备
+exports.putEquipmentRet = async (
+    equipmentID,
+    stuID
+) => {
+    try {
+        //连接数据库
+        var conn = await pool.getConnection();
+        //SQL修改设备状态为未借出
+        let equipmentRetSql =
+            "UPDATE equipment SET state = 0 WHERE equipment = ?";
+        let equipmentRetParam = [equipmentID];
+        let equipmentRetRes = await conn.query(equipmentRetSql, equipmentRetParam);
+        //SQL修改个人信息
+        let userSql =
+            "UPDATE user_info SET borrowTime += 1 WHERE stuID = ?";
+        let userParam = [stuID];
+        let userRes = await conn.query(userSql, userParam);
+        
+        let result = 200;
+        return result;
+    } catch (err) {
+        console.log("putEquipmentRet Model Error" + err);
+        return null;
+    } finally {
+        await conn.release();
+    }
+};
 /* 调试单个sql语句的参考代码 */
 
 // const pool = require("./pool");
@@ -197,38 +211,3 @@ exports.getBorrowedEquipment = async (
 //     await conn.release();
 // }
 // test(1, 123, "play", "13845679876", 132, 3190105240);
-
-/*const pool = require("./pool");
-const mysql = require("mysql2");
-let test = async (
-    stuID
-) => {
-    try {
-        console.log("dfvdfv");
-        var conn = await pool.getConnection();
-
-        let equipmentSql = 
-            "SELECT equipmentID, startTime, returnTime FROM borrow_apply WHERE stuID = ?";
-        let equipmentParam = [stuID];
-        let equipmentRes = await conn.query(equipmentSql, equipmentParam);
-        let equipmentID = equipmentRes[0][0].equipmentID;
-        let startTime = equipmentRes[0][0].startTime;
-        let returnTime = equipmentRes[0][0].returnTime;
-        console.log("1111");
-        console.log(equipmentRes);
-        return {
-            equipmentID, 
-            startTime, 
-            returnTime
-        }
-    } catch (err) {
-        console.log("getBorrrowedEquipment Model Error" + err);
-        return null;
-    } finally {
-        await conn.release();
-    }
-};
-test(2);
-
-console.log("rvesv");
-*/

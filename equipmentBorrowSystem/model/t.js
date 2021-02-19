@@ -1,32 +1,21 @@
 const pool = require("./pool");
 const mysql = require("mysql2");
 let t = async (
-    stuID
+    equipmentID
 ) => {
     try {
+        //连接数据库
         var conn = await pool.getConnection();
-
-        let equipmentSql = 
-            "SELECT equipmentID, startTime, returnTime FROM borrow_apply WHERE stuID = ?";
-        let equipmentParam = [stuID];
-        let equipmentRes = await conn.query(equipmentSql, equipmentParam);
+        //SQL修改设备状态为未借出
+        let equipmentRetSql =
+            "UPDATE equipment SET state = 0 WHERE equipment = ?";
+        let equipmentRetParam = [equipmentID];
+        let equipmentRetRes = await conn.query(equipmentRetSql, equipmentRetParam);
         
-        let equipmentID = [];
-        for ( let i = 0 ; i < equipmentRes[0].length ; i++) {
-            equipmentID[i] = equipmentRes[0][i].equipmentID;
-        }
-        
-        let equipmentNameSql =
-            "SELECT equipmentName FROM id_equipment WHERE equipmentID in (?)";
-        let equipmentNameParam = [equipmentID];
-        let equipmentNameRes = await conn.query(equipmentNameSql, equipmentNameParam);
-
-        for ( let i = 0 ; i < equipmentRes[0].length ; i++) {
-            equipmentRes[0][i].equipmentName = equipmentNameRes[0][i].equipmentName;
-        }
-        console.log(equipmentRes[0]);
+        let result = 200;
+        return result;
     } catch (err) {
-        console.log("getBorrrowedEquipment Model Error" + err);
+        console.log("putEquipmentRet Model Error" + err);
         return null;
     } finally {
         await conn.release();

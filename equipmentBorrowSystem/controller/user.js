@@ -1,4 +1,5 @@
 const models = require("../model/index");
+const { param } = require("../routes/user");
 const sso = require("./ssoUtil.js");
 
 exports.putBorrowApply = async (body, params) => {
@@ -129,5 +130,25 @@ exports.getBorrowedEquipment = async (body, params) => {
         }
     }
 
+    return ret;
+};
+
+exports.putEquipmentRet = async (body, params) => {
+    let ret;
+    let equipmentID = params.equipmentID;
+    let modelResult = await models.userModel.putEquipmentRet(equipmentID);
+    if (!modelResult) {
+        ret = {
+            errorCode: 400,
+            errorMsg: "操作数据库出错，归还失败",
+            payload: {}
+        };
+    } else {
+        ret = {
+            errorCode: 200,
+            errorMsg: "成功归还设备",
+            payload: {}
+        };
+    }
     return ret;
 };

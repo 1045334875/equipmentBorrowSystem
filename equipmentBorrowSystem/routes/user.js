@@ -37,4 +37,10 @@ router.get("/user/borrowedEquipment", async (req, res) => {
   res.send(ret).end();
 })
 
+//006.归还设备
+router.put("/user/equipmentID/:equipmentID/equipmentRet", async (req, res) => {
+  let ret = await userController.putEquipmentRet(req.body, req.params);
+  res.send(ret).end();
+})
+
 module.exports = router;

@@ -1,4 +1,5 @@
 const models = require("../model/index");
+const { param } = require("../routes/user");
 
 exports.putBorrowApply = async (body, params) => {
     let ret;
@@ -14,7 +15,7 @@ exports.putBorrowApply = async (body, params) => {
     let stuID = 3190105240; // 暂时写死
 
     let longestTime = await models.userModel.getLongestTime(equipmentID);
-
+    console.log(longestTime);
     if (returnTime - startTime <= longestTime && returnTime > startTime) {
         let modelResult = await models.userModel.putBorrowApply(
             equipmentID,
@@ -57,8 +58,10 @@ exports.putBorrowApply = async (body, params) => {
 
 
 exports.getLongestTime = async (params) => {
+    //console.log(params);
     let ret;
     let equipmentID = params.equipmentID;
+    //console.log(equipmentID);
     let modelResult = await models.userModel.getLongestTime(equipmentID);
     if (!modelResult) {
         ret = {
@@ -78,3 +81,45 @@ exports.getLongestTime = async (params) => {
 
     return ret;
 };
+
+exports.getequipmentInfo = async (body, params) => {
+    let isCamera = body.isCamera;
+    let size = params.size;
+    let page = params.page;
+    let data =[];
+    let modelResult = await models.userModel.getequipmentInfo(isCamera);
+    if(!modelResult){
+        ret = {
+            errorCode: 400,
+            errorMsg: "操作数据库出错",
+            payload:{},
+        };
+    } else {
+        let totalNum = modelResult.totalNum;
+        let equipmentRet = modelResult.data;
+        //console.log(totalNum,equipmentRet);
+        let start = (page-1)*size;
+        let end = Math.min(start + parseInt(size),totalNum);
+        //console.log(start,end,start + size);
+        for (let i=start; i<end; i++){
+            data.push( equipmentRet[i]);
+        }
+        if(data == false){
+                ret = {
+                errorCode: 400,
+                errorMsg: "page 参数出错",
+                payload: {}
+            };
+        } else{
+            ret = {
+                errorCode: 200,
+                errorMsg: "成功返回设备信息",
+                payload: {
+                totalNum: totalNum,
+                data: data,
+                }
+            };
+        }   
+    }
+    return ret;
+}

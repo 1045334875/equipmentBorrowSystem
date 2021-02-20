@@ -6,7 +6,7 @@ module.exports = router;
 
 // 中间件，起识别拦截作用
 // 这个中间件一定要放在route文件的最上面：route匹配是【从上到下&&从前到后】的。
-router.use("/", async (req, res, next) => {
+//router.use("/", async (req, res, next) => {
   // 调用一个专门的controller, 将token发给这个controller
   // controller先检查一下token是否是null
   // controller调用新用户系统接口，返回用户的token是否过期、真实
@@ -15,9 +15,14 @@ router.use("/", async (req, res, next) => {
   // 执行真正接口的代码：next();
   // 如果token不存在，或者过期，或者假的：res.send(message).end();
   // 如果是admin的拦截？那还要多一步检测管理员身份
-})
+//})
 
 // req: request res: respond
+router.get("/size/:size/page/:page/equipmentInfo", async(req, res)=>{
+  let ret = await userController.getequipmentInfo(req.body,req.params);
+  res.send(ret).end();
+})
+
 router.put("/equipmentID/:equipmentID/borrowApply", async (req, res) => {
   // console.log("Here!");
   let ret = await userController.putBorrowApply(req.body, req.params);
@@ -25,8 +30,9 @@ router.put("/equipmentID/:equipmentID/borrowApply", async (req, res) => {
   res.send(ret).end();
 })
 
-router.get("/equipmentID/:equiomentID/longestBorrowTime", async (req, res) =>{
-  console.log("Here!");
+router.get("/equipmentID/:equipmentID/longestBorrowTime", async (req, res) =>{
+  //console.log("Here!");
   let ret = await userController.getLongestTime(req.params);
   res.send(ret).end();
 })
+

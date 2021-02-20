@@ -1,3 +1,4 @@
+const { use } = require("../routes/user");
 const adminController = require("./admin");
 const userController = require("./user");
 

@@ -49,6 +49,7 @@ const mysql = require("mysql2");
 //     }
 // };
 
+
 // 获取最长借用时间
 exports.getLongestTime = async (
     equipmentID
@@ -62,7 +63,7 @@ exports.getLongestTime = async (
             "SELECT longestBorrowTime FROM equipment WHERE equipmentID = ?";
         let equipmentParam = [equipmentID];
         let equipmentRes = await conn.query(equipmentSql, equipmentParam);
-        if (!equipmentRes[0][0]){
+        if (!equipmentRes[0][0]) {
             throw new Error("equipmentID有误");
         }
         let longestTime = equipmentRes[0][0].longestBorrowTime;

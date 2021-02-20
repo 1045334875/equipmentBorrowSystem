@@ -4,8 +4,6 @@ const oauthConfig = {
     appKey: 'bdyy',
     appSecret: 'bdyy',
 };
-
-
 const exported = {
     oauthConfig
 };
@@ -31,3 +29,6 @@ exported.getUserInformation = (accessToken) => {
         });
     });
 };
+
+
+module.exports = exported;

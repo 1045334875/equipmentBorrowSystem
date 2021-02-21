@@ -1,5 +1,4 @@
 const models = require("../model/index");
-const { param } = require("../routes/user");
 const sso = require("./ssoUtil.js");
 
 exports.putBorrowApply = async (body, params) => {
@@ -57,43 +56,29 @@ exports.putBorrowApply = async (body, params) => {
     return ret;
 };
 
-exports.getUserInfo = async (body, params) => {
+exports.getUserInfo = async (body, params/*, userInfo*/) => {
     let ret;
 
-    let result = await sso.getUserInfo(accesstoken).then();
-    let stuID = result.id;
-
-    if(!result) {
+    //let stuID = userInfo.id;
+    let stuID = "3200106058";
+    let userResult = await models.userModel.getUserInfo(stuID);
+    //let userResult = {ss:1};
+    //console.log(userResult);
+    if (userResult) {
+        userResult.stuID = stuID;
         ret = {
-            errorCode: 400,
-            errorMsg: "token出错",
-            payload: {}
+            errorCode: 200,
+            errorMsg: "成功返回个人基本信息",
+            payload: userResult
         };
     } else {
-        let userInfo = await models.usermodel.getUserInfo(stuID);
-    
-        if (userInfo) {
-            ret = {
-                errorCode: 200,
-                errorMsg: "成功返回个人基本信息",
-                payload: {
-                    name: userInfo.name,
-                    stuID: stuID,
-                    department: userInfo.department,
-                    departmentName: userInfo.departmentName,
-                    position: userInfo.position,
-                    stuPicture: userInfo.stuPicture,
-                    borrowTime: userInfo.borrowTime
-                }
-            };
-        } else {
-            ret = {
-                errorCode: 600,
-                errorMsg: "操作数据库出错，获取信息失败",
-                payload: {}
-            };
-        }
+        ret = {
+            errorCode: 600,
+            errorMsg: "操作数据库出错，获取信息失败",
+            payload: {}
+        };
     }
+
 
     return ret;
 };
@@ -101,34 +86,27 @@ exports.getUserInfo = async (body, params) => {
 exports.getBorrowedEquipment = async (body, params) => {
     let ret;
 
-    let result = await sso.getUserInfo(accesstoken).then();
-    let stuID = result.id;
+    //let result = await sso.getUserInfo(accesstoken).then();
+    //let stuID = result.id;
+    stuID = "3200106058";
+    let borrowedEquipment = await models.userModel.getBorrowedEquipment(stuID);
 
-    if (!result) {
+    if (!borrowedEquipment) {
         ret = {
-            errorCode: 400,
-            errorMsg: "token出错",
+            errorCode: 600,
+            errorMsg: "操作数据库出错，获取信息失败",
             payload: {}
         };
     } else {
-        let borrowedEquipment = await models.userModel.getBorrowedEquipment(stuID);
-
-        if(!borrowedEquipment) {
-            ret = {
-                errorCode: 600,
-                errorMsg: "操作数据库出错，获取信息失败",
-                payload: {}
-            };
-        } else {
-            ret = {
-                errorCode: 200,
-                errorMsg: "成功返回个人正在借用设备信息及归还日期",
-                payload: {
-                    data: borrowedEquipment
-                }
-            };
-        }
+        ret = {
+            errorCode: 200,
+            errorMsg: "成功返回个人正在借用设备信息及归还日期",
+            payload: {
+                data: borrowedEquipment
+            }
+        };
     }
+    
 
     return ret;
 };
@@ -136,7 +114,11 @@ exports.getBorrowedEquipment = async (body, params) => {
 exports.putEquipmentRet = async (body, params) => {
     let ret;
     let equipmentID = params.equipmentID;
-    let modelResult = await models.userModel.putEquipmentRet(equipmentID);
+    
+    //let result = await sso.getUserInfo(accesstoken).then();
+    //let stuID = result.id;
+    let stuID = "3200106058";
+    let modelResult = await models.userModel.putEquipmentRet(equipmentID, stuID);
     if (!modelResult) {
         ret = {
             errorCode: 400,

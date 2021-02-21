@@ -48,6 +48,7 @@ const mysql = require("mysql2");
 //     }
 // };
 
+
 // 获取最长借用时间
 exports.getLongestTime = async (
     equipmentID
@@ -61,11 +62,11 @@ exports.getLongestTime = async (
             "SELECT longestBorrowTime FROM equipment WHERE equipmentID = ?";
         let equipmentParam = [equipmentID];
         let equipmentRes = await conn.query(equipmentSql, equipmentParam);
-        if (!equipmentRes[0][0]){
+        if (!equipmentRes[0][0]) {
             throw new Error("equipmentID有误");
         }
         let longestTime = equipmentRes[0][0].longestBorrowTime;
-        
+
         return longestTime;
     } catch (err) {
         console.log("getLongestTime Model Error" + err);
@@ -114,14 +115,16 @@ exports.getUserInfo = async (
     stuID
 ) => {
     try {
+        
         //连接数据库
         var conn = await pool.getConnection();
         //SQL查询
+        //console.log(stuID);
         let userSql = 
             "SELECT name, department, departmentName, position, stuPicture, borrowTime FROM user_info WHERE stuID = ?";
         let userParam = [stuID];
         let userRes = await conn.query(userSql, userParam);
-
+        //console.log(userRes[0][0]);
         return userRes[0][0];
     } catch (err) {
         console.log("getUserInfo Model Error" + err);
@@ -142,11 +145,13 @@ exports.getBorrowedEquipment = async (
             "SELECT equipmentID, startTime, returnTime FROM borrow_apply WHERE stuID = ?";
         let equipmentParam = [stuID];
         let equipmentRes = await conn.query(equipmentSql, equipmentParam);
+        //console.log(equipmentRes[0][1].equipmentID);
         //提取id为数组
         let equipmentID = [];
         for ( let i = 0 ; i < equipmentRes[0].length ; i++) {
             equipmentID[i] = equipmentRes[0][i].equipmentID;
         }
+        //console.log(equipmentID);
         //SQL由id数组查询name
         let equipmentNameSql =
             "SELECT equipmentName FROM id_equipment WHERE equipmentID in (?)";
@@ -156,7 +161,7 @@ exports.getBorrowedEquipment = async (
         for ( let i = 0 ; i < equipmentRes[0].length ; i++) {
             equipmentRes[0][i].equipmentName = equipmentNameRes[0][i].equipmentName;
         }
-
+        //console.log(equipmentRes[0]);
         return equipmentRes[0];
     } catch (err) {
         console.log("getBorrrowedEquipment Model Error" + err);
@@ -175,15 +180,20 @@ exports.putEquipmentRet = async (
         //连接数据库
         var conn = await pool.getConnection();
         //SQL修改设备状态为未借出
-        let equipmentRetSql =
-            "UPDATE equipment SET state = 0 WHERE equipment = ?";
-        let equipmentRetParam = [equipmentID];
-        let equipmentRetRes = await conn.query(equipmentRetSql, equipmentRetParam);
+        let equipmentSql =
+            "UPDATE equipment SET state = 0 WHERE equipmentID = ?";
+        let equipmentParam = [equipmentID];
+        let equipmentRes = await conn.query(equipmentSql, equipmentParam);
         //SQL修改个人信息
         let userSql =
-            "UPDATE user_info SET borrowTime += 1 WHERE stuID = ?";
+            "UPDATE user_info SET borrowTime = borrowTime + 1 WHERE stuID = ?";
         let userParam = [stuID];
         let userRes = await conn.query(userSql, userParam);
+        //SQL修改设备借用信息为已归还
+        let equipmentRetSql =
+            "UPDATE borrow_apply SET state = 0 WHERE equipmentID = ?";
+        let equipmentRetParam = [equipmentID];
+        let equipmentRetPes = await conn.query(equipmentRetSql, equipmentRetParam);
         
         let result = 200;
         return result;

@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 const controller = require("../controller/index")
 const {userController} = controller;  // 解构： 如果经常使用controller中的某一个属性，可以用这样的方式减少调用时候代码的长度
-const {adminController} = controller;
 module.exports = router;
 
 // 中间件，起识别拦截作用
@@ -21,7 +20,7 @@ module.exports = router;
 
 
 router.use("/", async (req, res, next) => {
-	let ret = await adminController.tokenChecker(req.headers['access-token']);
+	let ret = await controller.tokenChecker(req.headers['access-token']);
 
 	if (ret.errorCode == 200) {
 		req.userInfo = ret.payload;

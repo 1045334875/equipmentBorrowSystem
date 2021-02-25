@@ -1,6 +1,28 @@
 const models = require("../model/index");
 const { param } = require("../routes/user");
 
+exports.tokenChecker = async (accesstoken) => {
+    let flag = 1;
+    let result = await sso.getUserInformation(accesstoken).then().catch(function (err) {
+        flag = 0;
+        return {
+            errorCode: 400,
+            errorMsg: err,
+            payload: {}
+        };
+    }
+    );
+    if(flag) {
+        return {
+            errorCode: 200,
+            errorMsg: "accesstoken正确",
+            payload: result
+        };
+    } else {
+        return result;
+    }
+}
+
 exports.putBorrowApply = async (stuID,body, params) => {
     let ret;
     let equipmentID = params.equipmentID;

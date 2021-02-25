@@ -1,21 +1,17 @@
 const models = require("../model/index");
 const { param } = require("../routes/user");
 
-exports.putBorrowApply = async (body, params) => {
+exports.putBorrowApply = async (stuID,body, params) => {
     let ret;
     let equipmentID = params.equipmentID;
     let startTime = body.startTime;
     let reason = body.reason;
     let contactInfo = body.contactInfo;
     let returnTime = body.returnTime;
-
     // let result = await sso.getUserInformation(accesstoken).then();
     // let stuID = result.id;
-
-    let stuID = 3190105240; // 暂时写死
-
     let longestTime = await models.userModel.getLongestTime(equipmentID);
-    console.log(longestTime);
+    // console.log(longestTime);
     if (returnTime - startTime <= longestTime && returnTime > startTime) {
         let modelResult = await models.userModel.putBorrowApply(
             equipmentID,
@@ -23,7 +19,7 @@ exports.putBorrowApply = async (body, params) => {
             reason,
             contactInfo,
             returnTime,
-            stuID
+            stuID,
         );
 
         if (modelResult) {

@@ -90,7 +90,8 @@ exports.putBorrowApply = async (
         var conn = await pool.getConnection();
 
         let applySql =
-            "INSERT INTO borrow_apply (equipmentID, stuID, startTime, contactInfo, reason, returnTime) VALUE (?, ?, ?, ?, ?, ?)";
+            "INSERT INTO borrow_apply (equipmentID, stuID, startTime, contactInfo, reason, returnTime,state) VALUE (?, ?, ?, ?, ?, ?,?);"
+          + "UPDATE equipment SET state = ? WHEWE equipmentID = ?"
         let applyParam = [
             equipmentID,
             stuID,
@@ -98,6 +99,9 @@ exports.putBorrowApply = async (
             contactInfo,
             reason,
             returnTime,
+            1,
+            1,
+            equipmentID
         ];
         let applyRet = await conn.query(applySql, applyParam);
         let result = 200;

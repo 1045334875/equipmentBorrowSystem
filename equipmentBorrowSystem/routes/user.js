@@ -1,11 +1,11 @@
 var express = require('express');
 var router = express.Router();
 const controller = require("../controller/index")
-const {userController} = controller;  // 解构：如果经常使用controller中的某一个属性，可以用这样的方式减少调用时候代码的长度
+const {userController} = controller;
 
 
 /*router.use("/", async (req, res, next) => {
-	let ret = await controller.adminController.tokenChecker(req.headers['access-token']);
+	let ret = await controller.tokenChecker(req.headers['access-token']);
 
 	if (ret.errorCode == 200) {
 		req.userInfo = ret.payload;
@@ -23,7 +23,7 @@ const {userController} = controller;  // 解构：如果经常使用controller�
 // req: request res: respond
 router.put("/equipmentID/:equipmentID/borrowApply", async (req, res) => {
 	// console.log("Here!");
-	let ret = await controller.userController.putBorrowApply(req.body, req.params);
+	let ret = await controller.putBorrowApply(req.body, req.params);
 	// 调用一个controller, 获得处理的数据结果, 赋值给了ret
 	res.send(ret).end();
 })

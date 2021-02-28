@@ -28,7 +28,6 @@ exports.tokenChecker = async (accesstoken) => {
     } else {
         return result;
     }
-    
 }
 
 exports.isAdmin = async (stuID) => {

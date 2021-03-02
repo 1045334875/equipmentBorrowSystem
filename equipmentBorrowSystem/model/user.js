@@ -91,7 +91,8 @@ exports.putBorrowApply = async (
 
         let applySql =
             "INSERT INTO borrow_apply (equipmentID, stuID, startTime, contactInfo, reason, returnTime,state) VALUE (?, ?, ?, ?, ?, ?,?);"
-          + "UPDATE equipment SET state = ? WHEWE equipmentID = ?"
+        let equipmentSql=
+            "UPDATE equipment SET state = ? WHEWE equipmentID = ?"
         let applyParam = [
             equipmentID,
             stuID,
@@ -100,10 +101,13 @@ exports.putBorrowApply = async (
             reason,
             returnTime,
             1,
+        ];
+        let equipmentParam = [
             1,
             equipmentID
-        ];
+        ]
         let applyRet = await conn.query(applySql, applyParam);
+        let equipmentRet = await conn.query(equipmentSql,equipmentParam);
         let result = 200;
         return result;
     } catch (err) {
@@ -148,20 +152,33 @@ exports.getequipmentInfo = async (
 //  const pool = require("./pool");
 // const mysql = require("mysql2");
 // let test = async (
-//     isCamera
+//     equipmentID,
+//             stuID,
+//             startTime,
+//             contactInfo,
+//             reason,
+//             returnTime,
 //     ) => {
-//             var conn = await pool.getConnection();
-        
-//         let equipmentSql =
-//         "SELECT a.equipmentID, a.equipmentName, a.equipmentPicture, a.state, b.returnTime FROM equipment a LEFT JOIN (SELECT returnTime,equipmentID FROM borrow_apply WHERE state = 1) b ON a.equipmentid = b.equipmentID WHERE a.isCamera = ?";
-        
-//         let equipmentParam = [isCamera];
-//         let equipmentRet = await conn.query(equipmentSql, equipmentParam);
-//         let totalNum = equipmentRet[0].length;
-// console.log( totalNum,equipmentRet[0]);
+//         var conn = await pool.getConnection();
+
+//         let applySql =
+//             "INSERT INTO borrow_apply (equipmentID, stuID, startTime, contactInfo, reason, returnTime,state) VALUE (?, ?, ?, ?, ?, ?,?);"
+//           + "UPDATE equipment SET state = ? WHEWE equipmentID = ?"
+//         let applyParam = [
+//             equipmentID,
+//             stuID,
+//             startTime,
+//             contactInfo,
+//             reason,
+//             returnTime,
+//             1,
+//             1,
+//             equipmentID
+//         ];
+//         let applyRet = await conn.query(applySql, applyParam);
 //     await conn.release();
 // }
-// test(1);
+// test(1,3200104385,1,1,1,2);
 
 
 

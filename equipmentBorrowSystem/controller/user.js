@@ -1,7 +1,9 @@
 const models = require("../model/index");
 const { param } = require("../routes/user");
+const sso = require("./ssoUtil.js");
 
 exports.tokenChecker = async (accesstoken) => {
+    console.log(accesstoken);
     let flag = 1;
     let result = await sso.getUserInformation(accesstoken).then().catch(function (err) {
         flag = 0;
@@ -23,7 +25,7 @@ exports.tokenChecker = async (accesstoken) => {
     }
 }
 
-exports.putBorrowApply = async (stuID,body, params) => {
+exports.putBorrowApply = async (/*stuID,*/body, params) => {
     let ret;
     let equipmentID = params.equipmentID;
     let startTime = body.startTime;
@@ -34,6 +36,7 @@ exports.putBorrowApply = async (stuID,body, params) => {
     // let stuID = result.id;
     let longestTime = await models.userModel.getLongestTime(equipmentID);
     // console.log(longestTime);
+    let stuID = 3200104385;
     if (returnTime - startTime <= longestTime && returnTime > startTime) {
         let modelResult = await models.userModel.putBorrowApply(
             equipmentID,

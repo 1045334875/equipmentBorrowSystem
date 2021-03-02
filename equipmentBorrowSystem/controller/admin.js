@@ -1,4 +1,3 @@
-const model = require("../model/index");
 const models = require("../model/index");
 const sso = require("./ssoUtil.js");
 const { adminModel } = models;

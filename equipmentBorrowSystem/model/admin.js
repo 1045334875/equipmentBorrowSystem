@@ -1,33 +1,63 @@
 const pool = require("./pool");
 const mysql = require("mysql2");
 
-// 获取设备借出状态
-exports.getEquipmentState = async (
-    equipmentID
+
+
+
+//添加设备
+exports.putEquipmentAdd = async (
+    equipmentID,
+    equipmentName,
+    equipmentPicture,
+    longestBorrowTime,
+    isCamera
 ) => {
     try {
         var conn = await pool.getConnection();
-        
+        //console.log("dsssfe");
         let equipmentSql =
-            "SELECT state FROM equipment WHERE equipmentID = ?";
-        let equipmentParam = [equipmentID];
+            " INSERT INTO equipment (equipmentID,equipmentName,equipmentPicture,longestBorrowTime,isCamera,state) VALUES (?,?,?,?,?,0)";
+        let equipmentParam = [
+            equipmentID,
+            equipmentName,
+            equipmentPicture,
+            longestBorrowTime,
+            isCamera
+        ];
         let equipmentRes = await conn.query(equipmentSql, equipmentParam);
-        
-        if (!equipmentRes[0][0]) {
-            throw new Error("equipmentID有误");
-        }
-        let state = equipmentRes[0][0].state;
-        return state;
+        return 200;
     } catch (err) {
-        console.log("getEquipmentState Model Error" + err);
+        console.log("putEquipmentAdd Model Error" + err);
         return null;
     } finally {
         await conn.release();
     }
-}
+};
+//putEquipmentAdd(1, "gbegte", "dgg", "34234", 1);
+
+// 删除设备
+exports.deleteEquipmentDelete = async (
+    equipmentID
+) => {
+    try {
+        var conn = await pool.getConnection();
+
+        let equipmentSql =
+            "DELETE FROM equipment WHERE equipmentID=?";
+        let equipmentParam = [equipmentID];
+        let equipmentRes = await conn.query(equipmentSql, equipmentParam);
+        
+        return 200;
+    } catch (err) {
+        console.log("deleteEquipmentDelete Model Error" + err);
+        return null;
+    } finally {
+        await conn.release();
+    }
+};
 
 // 获取借出设备
-exports.getEquipmentOnLoan = async () => {
+/*exports.getEquipmentOnLoan = async () => {
     try {
         var conn = await pool.getConnection();
 
@@ -161,7 +191,7 @@ exports.isAdmin = async (
         await conn.release();
     }
 }
-
+*/
 // const pool = require("./pool");
 // const mysql = require("mysql2");
 // let test = async () => {

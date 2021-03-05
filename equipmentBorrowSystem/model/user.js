@@ -154,7 +154,7 @@ exports.getBorrowedEquipment = async (
         //console.log(equipmentID);
         //SQL由id数组查询name
         let equipmentNameSql =
-            "SELECT equipmentName FROM id_equipment WHERE equipmentID in (?)";
+            "SELECT equipmentName FROM equipment WHERE equipmentID in (?)";
         let equipmentNameParam = [equipmentID];
         let equipmentNameRes = await conn.query(equipmentNameSql, equipmentNameParam);
         //将name合并到对象中

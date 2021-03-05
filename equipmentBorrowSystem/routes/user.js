@@ -1,11 +1,12 @@
 var express = require('express');
 var router = express.Router();
-const controller = require("../controller/index")
-const {userController} = controller;  // 解构： 如果经常使用controller中的某一个属性，可以用这样的方式减少调用时候代码的长度
-module.exports = router;
+ const controller = require("../controller/index");
+ const {userController} = controller;  // 解构： 如果经常使用controller中的某一个属性，可以用这样的方式减少调用时候代码的长度
+
 
 // router.use("/", async (req, res, next) => {
 // 	let ret = await userController.tokenChecker(req.headers['access-token']);
+
 // 	if (ret.errorCode == 200) {
 // 		req.userInfo = ret.payload;
 // 		next();
@@ -21,6 +22,7 @@ module.exports = router;
 
 // req: request res: respond
 router.get("/size/:size/page/:page/equipmentInfo", async(req, res)=>{
+  //console.log(controller);
   let ret = await userController.getequipmentInfo(req.body,req.params);
   res.send(ret).end();
 })
@@ -38,3 +40,4 @@ router.get("/equipmentID/:equipmentID/longestBorrowTime", async (req, res) =>{
   res.send(ret).end();
 })
 
+module.exports = router;

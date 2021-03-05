@@ -92,7 +92,7 @@ exports.putBorrowApply = async (
         let applySql =
             "INSERT INTO borrow_apply (equipmentID, stuID, startTime, contactInfo, reason, returnTime,state) VALUE (?, ?, ?, ?, ?, ?,?);"
         let equipmentSql=
-            "UPDATE equipment SET state = ? WHEWE equipmentID = ?"
+            "UPDATE equipment SET state = ? WHERE equipmentID = ?"
         let applyParam = [
             equipmentID,
             stuID,
@@ -152,18 +152,18 @@ exports.getequipmentInfo = async (
 //  const pool = require("./pool");
 // const mysql = require("mysql2");
 // let test = async (
-//     equipmentID,
-//             stuID,
-//             startTime,
-//             contactInfo,
-//             reason,
-//             returnTime,
+//    equipmentID,
+//     startTime,
+//     reason,
+//     contactInfo,
+//     returnTime,
+//     stuID
 //     ) => {
 //         var conn = await pool.getConnection();
-
-//         let applySql =
-//             "INSERT INTO borrow_apply (equipmentID, stuID, startTime, contactInfo, reason, returnTime,state) VALUE (?, ?, ?, ?, ?, ?,?);"
-//           + "UPDATE equipment SET state = ? WHEWE equipmentID = ?"
+// let applySql =
+//             "INSERT INTO borrow_apply (equipmentID, stuID, startTime, contactInfo, reason, returnTime,state) VALUE (?, ?, ?, ?, ?, ?,?)";
+//         let equipmentSql=
+//             "UPDATE equipment SET state = ? WHErE equipmentID = ?";
 //         let applyParam = [
 //             equipmentID,
 //             stuID,
@@ -172,11 +172,15 @@ exports.getequipmentInfo = async (
 //             reason,
 //             returnTime,
 //             1,
+//         ];
+//         let equipmentParam = [
 //             1,
 //             equipmentID
-//         ];
+//         ]
 //         let applyRet = await conn.query(applySql, applyParam);
+//         let equipmentRet = await conn.query(equipmentSql,equipmentParam);
 //     await conn.release();
+//     console.log("ok");
 // }
 // test(1,3200104385,1,1,1,2);
 

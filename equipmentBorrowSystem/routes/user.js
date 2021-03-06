@@ -4,9 +4,9 @@ const controller = require("../controller/index")
 const {userController} = controller;
 
 
-/*router.use("/", async (req, res, next) => {
-	let ret = await controller.tokenChecker(req.headers['access-token']);
-
+router.use("/", async (req, res, next) => {
+	let ret = await userController.tokenChecker(req.headers['accesstoken']);
+	console.log(ret);
 	if (ret.errorCode == 200) {
 		req.userInfo = ret.payload;
 		next();
@@ -18,7 +18,7 @@ const {userController} = controller;
 		}
 		res.send(message).end();
 	}
-})*/
+})
 
 // req: request res: respond
 router.put("/equipmentID/:equipmentID/borrowApply", async (req, res) => {
@@ -30,19 +30,19 @@ router.put("/equipmentID/:equipmentID/borrowApply", async (req, res) => {
 
 //004.获取个人信息
 router.get("/userInfo", async (req, res) => {
-  let ret = await userController.getUserInfo(req.body, req.params/*, req.userInfo*/);
+  let ret = await userController.getUserInfo(req.body, req.params, req.userInfo);
   res.send(ret).end();
 })
 
 //005.获取个人正在借用设备信息及归还日期
 router.get("/borrowedEquipment", async (req, res) => {
-  let ret = await userController.getBorrowedEquipment(req.body, req.params);
+  let ret = await userController.getBorrowedEquipment(req.body, req.params, req.userInfo);
   res.send(ret).end();
 })
 
 //006.归还设备
 router.put("/equipmentID/:equipmentID/equipmentRet", async (req, res) => {
-  let ret = await userController.putEquipmentRet(req.body, req.params);
+  let ret = await userController.putEquipmentRet(req.body, req.params, req.userInfo);
   res.send(ret).end();
 })
 

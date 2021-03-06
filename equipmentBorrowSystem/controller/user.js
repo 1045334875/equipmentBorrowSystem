@@ -78,11 +78,12 @@ exports.putBorrowApply = async (body, params) => {
     return ret;
 };
 
-exports.getUserInfo = async (body, params/*, userInfo*/) => {
+exports.getUserInfo = async (body, params, userInfo) => {
     let ret;
 
-    //let stuID = userInfo.id;
-    let stuID = "3200106058";
+    let stuID = userInfo.id;
+    //console.log(stuID);
+    //let stuID = "3200106058";
     let userResult = await models.userModel.getUserInfo(stuID);
     //let userResult = {ss:1};
     //console.log(userResult);
@@ -105,12 +106,11 @@ exports.getUserInfo = async (body, params/*, userInfo*/) => {
     return ret;
 };
 
-exports.getBorrowedEquipment = async (body, params) => {
+exports.getBorrowedEquipment = async (body, params, userInfo) => {
     let ret;
 
-    //let result = await sso.getUserInfo(accesstoken).then();
-    //let stuID = result.id;
-    stuID = "3200106058";
+    let stuID = userInfo.id;
+    //stuID = "3200106058";
     let borrowedEquipment = await models.userModel.getBorrowedEquipment(stuID);
 
     if (!borrowedEquipment) {
@@ -133,13 +133,13 @@ exports.getBorrowedEquipment = async (body, params) => {
     return ret;
 };
 
-exports.putEquipmentRet = async (body, params) => {
+exports.putEquipmentRet = async (body, params, userInfo) => {
     let ret;
     let equipmentID = params.equipmentID;
     
     //let result = await sso.getUserInfo(accesstoken).then();
-    //let stuID = result.id;
-    let stuID = "3200106058";
+    let stuID = userInfo.id;
+    //let stuID = "3200106058";
     let modelResult = await models.userModel.putEquipmentRet(equipmentID, stuID);
     if (!modelResult) {
         ret = {

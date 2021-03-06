@@ -125,6 +125,16 @@ exports.getUserInfo = async (
         let userParam = [stuID];
         let userRes = await conn.query(userSql, userParam);
         //console.log(userRes[0][0]);
+        let privilegeSql = 
+            "SELECT id FROM admin WHERE id = ?";
+        let privilegeParam = [stuID];
+        let privilegeRes = await conn.query(privilegeSql, privilegeParam);
+        console.log(privilegeRes[0][0]);
+        if(privilegeRes[0][0])  {
+            userRes[0][0].privilege = 1;
+        }else  {
+            userRes[0][0].privilege = 0;
+        }
         return userRes[0][0];
     } catch (err) {
         console.log("getUserInfo Model Error" + err);

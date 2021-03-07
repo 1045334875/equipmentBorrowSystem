@@ -6,7 +6,7 @@ const {userController} = controller;
 
 router.use("/", async (req, res, next) => {
 	let ret = await userController.tokenChecker(req.headers['accesstoken']);
-	console.log(ret);
+	//console.log(ret);
 	if (ret.errorCode == 200) {
 		req.userInfo = ret.payload;
 		next();

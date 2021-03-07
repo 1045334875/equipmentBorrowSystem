@@ -1,8 +1,8 @@
 const request = require('request');
 const oauthConfig = {
     server: 'https://sso.zjutv.com',
-    appKey: 'bdyy',
-    appSecret: 'bdyy',
+    appKey: '4SOfiQSkwMnE',
+    appSecret: '24emn7CwdJMx',
 };
 const exported = {
     oauthConfig
@@ -10,7 +10,7 @@ const exported = {
 
 exported.getUserInformation = (accessToken) => {
     return new Promise((resolve, reject) => {
-        let reqUrl = `${oauthConfig.server}/user_account/api/oauth/service/users/info?accesstoken=${accessToken}&app_key=${oauthConfig.appKey}&app_secret=${oauthConfig.appSecret}`;
+        let reqUrl = `${oauthConfig.server}/user_account/api/oauth/service/users/info?access_token=${accessToken}&app_key=${oauthConfig.appKey}&app_secret=${oauthConfig.appSecret}`;
         request(reqUrl, function (error, response, body) {
             if (error) {
                 reject(error);

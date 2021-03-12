@@ -1,7 +1,9 @@
 const models = require("../model/index");
+const { param } = require("../routes/user");
 const sso = require("./ssoUtil.js");
 
 exports.tokenChecker = async (accesstoken) => {
+    console.log(accesstoken);
     let flag = 1;
     let result = await sso.getUserInformation(accesstoken).then().catch(function (err) {
         flag = 0;
@@ -23,32 +25,29 @@ exports.tokenChecker = async (accesstoken) => {
     }
 }
 
-exports.putBorrowApply = async (body, params) => {
+exports.putBorrowApply = async (/*stuID,*/body, params) => {
     let ret;
     let equipmentID = params.equipmentID;
     let startTime = body.startTime;
     let reason = body.reason;
     let contactInfo = body.contactInfo;
     let returnTime = body.returnTime;
-
     // let result = await sso.getUserInformation(accesstoken).then();
     // let stuID = result.id;
-
-    let stuID = 3190105240; // 暂时写死
-
     let longestTime = await models.userModel.getLongestTime(equipmentID);
-
+    // console.log(longestTime);
+    let stuID = 3200104385;
     if (returnTime - startTime <= longestTime && returnTime > startTime) {
-        let moduleResult = await models.userModel.putBorrowApply(
+        let modelResult = await models.userModel.putBorrowApply(
             equipmentID,
             startTime,
             reason,
             contactInfo,
             returnTime,
-            stuID
+            stuID,
         );
 
-        if (moduleResult) {
+        if (modelResult) {
             ret = {
                 errorCode: 200,
                 errorMsg: "借用成功",
@@ -78,57 +77,28 @@ exports.putBorrowApply = async (body, params) => {
     return ret;
 };
 
-exports.getUserInfo = async (body, params/*, userInfo*/) => {
+
+exports.getLongestTime = async (params) => {
+    //console.log(params);
     let ret;
-
-    //let stuID = userInfo.id;
-    let stuID = "3200106058";
-    let userResult = await models.userModel.getUserInfo(stuID);
-    //let userResult = {ss:1};
-    //console.log(userResult);
-    if (userResult) {
-        userResult.stuID = stuID;
+    let equipmentID = params.equipmentID;
+    //console.log(equipmentID);
+    let modelResult = await models.userModel.getLongestTime(equipmentID);
+    if (!modelResult) {
         ret = {
-            errorCode: 200,
-            errorMsg: "成功返回个人基本信息",
-            payload: userResult
-        };
-    } else {
-        ret = {
-            errorCode: 600,
-            errorMsg: "操作数据库出错，获取信息失败",
-            payload: {}
-        };
-    }
-
-
-    return ret;
-};
-
-exports.getBorrowedEquipment = async (body, params) => {
-    let ret;
-
-    //let result = await sso.getUserInfo(accesstoken).then();
-    //let stuID = result.id;
-    stuID = "3200106058";
-    let borrowedEquipment = await models.userModel.getBorrowedEquipment(stuID);
-
-    if (!borrowedEquipment) {
-        ret = {
-            errorCode: 600,
-            errorMsg: "操作数据库出错，获取信息失败",
-            payload: {}
+            errorCode: 400,
+            errorMsg: "操作数据库出错",
+            payload: {},
         };
     } else {
         ret = {
             errorCode: 200,
-            errorMsg: "成功返回个人正在借用设备信息及归还日期",
+            errorMsg: "最长借用时间查询成功",
             payload: {
-                data: borrowedEquipment
+                longestBorrowTime: modelResult,
             }
         };
     }
-    
 
     return ret;
 };
@@ -156,3 +126,44 @@ exports.putEquipmentRet = async (body, params) => {
     }
     return ret;
 };
+exports.getequipmentInfo = async (body, params) => {
+    let isCamera = body.isCamera;
+    let size = params.size;
+    let page = params.page;
+    let data =[];
+    let modelResult = await models.userModel.getequipmentInfo(isCamera);
+    if(!modelResult){
+        ret = {
+            errorCode: 400,
+            errorMsg: "操作数据库出错",
+            payload:{},
+        };
+    } else {
+        let totalNum = modelResult.totalNum;
+        let equipmentRet = modelResult.data;
+        //console.log(totalNum,equipmentRet);
+        let start = (page-1)*size;
+        let end = Math.min(start + parseInt(size),totalNum);
+        //console.log(start,end,start + size);
+        for (let i=start; i<end; i++){
+            data.push( equipmentRet[i]);
+        }
+        if(data == false){
+                ret = {
+                errorCode: 400,
+                errorMsg: "page 参数出错",
+                payload: {}
+            };
+        } else{
+            ret = {
+                errorCode: 200,
+                errorMsg: "成功返回设备信息",
+                payload: {
+                totalNum: totalNum,
+                data: data,
+                }
+            };
+        }   
+    }
+    return ret;
+}

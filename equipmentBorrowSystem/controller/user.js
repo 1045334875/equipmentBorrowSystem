@@ -1,5 +1,4 @@
 const models = require("../model/index");
-const { param } = require("../routes/user");
 const sso = require("./ssoUtil.js");
 
 exports.tokenChecker = async (accesstoken) => {

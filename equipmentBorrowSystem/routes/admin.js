@@ -38,7 +38,17 @@ router.get("/equipmentOnLoan", async (req, res) => {
 })
 
 router.get("/equipmentID/:equipmentID/equipmentOnLoanMsg", async (req, res) => {
-    let ret = await adminController.getEquipmentOnLoanMsg(req.params);
+    let ret = await adminController.getEquipmentOnLoanMsg(req.body, req.params);
+    res.send(ret).end();
+})
+
+router.put("/equipmentID/:equipmentID/equipmentAdd", async (req, res) => {
+    let ret = await adminController.putEquipmentAdd(req.body, req.params);
+    res.send(ret).end();
+})
+
+router.delete("/equipmentID/:equipmentID/equipmentDelete", async (req, res) => {
+    let ret = await adminController.deleteEquipmentDelete(req.body, req.params);
     res.send(ret).end();
 })
 

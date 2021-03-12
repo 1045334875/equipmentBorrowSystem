@@ -25,11 +25,7 @@ exports.tokenChecker = async (accesstoken) => {
     }
 }
 
-<<<<<<< HEAD
-exports.putBorrowApply = async (stuID,contactInfo,body, params) => {
-=======
 exports.putBorrowApply = async (stuID,contactInfo, body, params) => {
->>>>>>> main
     let ret;
     let equipmentID = params.equipmentID;
     let startTime = body.startTime;

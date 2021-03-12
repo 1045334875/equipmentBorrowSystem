@@ -52,7 +52,7 @@ router.get("/equipmentOnLoan", async (req, res) => {
 
 //010
 router.get("/equipmentID/:equipmentID/equipmentOnLoanMsg", async (req, res) => {
-    let ret = await adminController.getEquipmentOnLoanMsg(req.body, req.params);
+    let ret = await adminController.getEquipmentOnLoanMsg(req.params);
     res.send(ret).end();
 })
 

@@ -3,7 +3,7 @@ const { param } = require("../routes/user");
 const sso = require("./ssoUtil.js");
 
 exports.tokenChecker = async (accesstoken) => {
-    console.log(accesstoken);
+    //console.log(accesstoken);
     let flag = 1;
     let result = await sso.getUserInformation(accesstoken).then().catch(function (err) {
         flag = 0;

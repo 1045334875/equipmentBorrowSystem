@@ -1,8 +1,8 @@
 const request = require('request');
 const oauthConfig = {
     server: 'https://sso.zjutv.com',
-    appKey: 'bdyy',
-    appSecret: 'bdyy',
+    appKey: '4SOfiQSkwMnE',
+    appSecret: '24emn7CwdJMx',
 };
 const exported = {
     oauthConfig

@@ -31,13 +31,27 @@ router.use("/", async (req, res, next) => {
     }
 })
 
+//007
+router.put("/equipmentID/:equipmentID/equipmentAdd", async (req, res) => {
+    let ret = await adminController.putEquipmentAdd(req.body, req.params);
+    res.send(ret).end();
+})
+
+//008
+router.delete("/equipmentID/:equipmentID/equipmentDelete", async (req, res) => {
+    let ret = await adminController.deleteEquipmentDelete(req.body, req.params);
+    res.send(ret).end();
+})
+
+//009
 router.get("/equipmentOnLoan", async (req, res) => {
     let ret = await adminController.getEquipmentOnLoan();
     res.send(ret).end();
 })
 
+//010
 router.get("/equipmentID/:equipmentID/equipmentOnLoanMsg", async (req, res) => {
-    let ret = await adminController.getEquipmentOnLoanMsg(req.params);
+    let ret = await adminController.getEquipmentOnLoanMsg(req.body, req.params);
     res.send(ret).end();
 })
 

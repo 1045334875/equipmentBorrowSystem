@@ -1,11 +1,21 @@
 var express = require('express');
 var router = express.Router();
+<<<<<<< HEAD
 const userController = require("../controller/user");
 // const {userController} = controller;  // 解构： 如果经常使用controller中的某一个属性，可以用这样的方式减少调用时候代码的长度
 
 
 router.use("/", async (req, res, next) => {
 	let ret = await userController.tokenChecker(req.headers['access-token']);
+=======
+const controller = require("../controller/index")
+const userController = require("../controller/user")
+//const {userController} = controller;  // 解构： 如果经常使用controller中的某一个属性，可以用这样的方式减少调用时候代码的长度
+module.exports = router;
+
+router.use("/", async (req, res, next) => {
+	let ret = await controller.tokenChecker(req.headers['access-token']);
+>>>>>>> main
 
 	if (ret.errorCode == 200) {
 		req.userInfo = ret.payload;
@@ -20,7 +30,10 @@ router.use("/", async (req, res, next) => {
 	}
 })
 
+<<<<<<< HEAD
 // req: request res: respond
+=======
+>>>>>>> main
 router.get("/size/:size/page/:page/equipmentInfo", async(req, res)=>{
   //console.log(controller);
   let ret = await userController.getequipmentInfo(req.body,req.params);
@@ -34,8 +47,25 @@ router.put("/equipmentID/:equipmentID/borrowApply", async (req, res) => {
 	res.send(ret).end();
 })
 
-router.get("/equipmentID/:equipmentID/longestBorrowTime", async (req, res) =>{
-  //console.log("Here!");
+//004.获取个人信息
+router.get("/userInfo", async (req, res) => {
+  let ret = await userController.getUserInfo(req.body, req.params, req.userInfo);
+  res.send(ret).end();
+})
+
+//005.获取个人正在借用设备信息及归还日期
+router.get("/borrowedEquipment", async (req, res) => {
+  let ret = await userController.getBorrowedEquipment(req.body, req.params, req.userInfo);
+  res.send(ret).end();
+})
+
+//006.归还设备
+router.put("/equipmentID/:equipmentID/equipmentRet", async (req, res) => {
+  let ret = await userController.putEquipmentRet(req.body, req.params, req.userInfo);
+  res.send(ret).end();
+})
+
+router.get("/equipmentID/:equipmentID/longestBorrowTime", async (req, res) => {
   let ret = await userController.getLongestTime(req.params);
   res.send(ret).end();
 })

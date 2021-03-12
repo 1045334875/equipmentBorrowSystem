@@ -149,7 +149,7 @@ exports.getBorrowedEquipment = async (body, params, userInfo) => {
             errorCode: 200,
             errorMsg: "最长借用时间查询成功",
             payload: {
-                longestBorrowTime: modelResult,
+                data: borrowedEquipment
             }
         };
     }

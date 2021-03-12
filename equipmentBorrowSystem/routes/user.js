@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 const controller = require("../controller/index")
-const {userController} = controller;  // 解构： 如果经常使用controller中的某一个属性，可以用这样的方式减少调用时候代码的长度
+const userController = require("../controller/user")
+//const {userController} = controller;  // 解构： 如果经常使用controller中的某一个属性，可以用这样的方式减少调用时候代码的长度
 module.exports = router;
 
 router.use("/", async (req, res, next) => {
@@ -46,14 +47,12 @@ router.get("/borrowedEquipment", async (req, res) => {
 
 //006.归还设备
 router.put("/equipmentID/:equipmentID/equipmentRet", async (req, res) => {
-  let ret = await userController.putEquipmentRet(req.body, req.params);
+  let ret = await userController.putEquipmentRet(req.body, req.params, req.userInfo);
   res.send(ret).end();
 })
 
-router.get("/equipmentID/:equipmentID/longestBorrowTime", async (req, res) =>{
-  //console.log("Here!");
+router.get("/equipmentID/:equipmentID/longestBorrowTime", async (req, res) => {
   let ret = await userController.getLongestTime(req.params);
-  let ret = await userController.putEquipmentRet(req.body, req.params, req.userInfo);
   res.send(ret).end();
 })
 

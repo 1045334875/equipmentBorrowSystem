@@ -4,12 +4,7 @@ const { adminModel } = models;
 
 exports.tokenChecker = async (accesstoken) => {
     let flag = 1;
-    let result;
-    await sso.getUserInformation(accesstoken).then(
-        function (data) {
-            result = data;
-        }
-    ).catch(function (err) {
+    let result = await sso.getUserInformation(accesstoken).then().catch(function (err) {
         flag = 0;
         return {
             errorCode: 400,

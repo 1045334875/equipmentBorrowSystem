@@ -80,7 +80,7 @@ exports.putBorrowApply = async (body, params) => {
 
 exports.getUserInfo = async (body, params, userInfo) => {
     let ret;
-
+    //调用远程数据库获取学号;
     let stuID = userInfo.id;
     //console.log(stuID);
     //let stuID = "3200106058";
@@ -88,6 +88,7 @@ exports.getUserInfo = async (body, params, userInfo) => {
     //let userResult = {ss:1};
     //console.log(userResult);
     if (userResult) {
+        //将学号合并到结果中;
         userResult.stuID = stuID;
         ret = {
             errorCode: 200,
@@ -124,6 +125,7 @@ exports.getBorrowedEquipment = async (body, params, userInfo) => {
             errorCode: 200,
             errorMsg: "成功返回个人正在借用设备信息及归还日期",
             payload: {
+                //返回数组;
                 data: borrowedEquipment
             }
         };

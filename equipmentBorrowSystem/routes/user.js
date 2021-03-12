@@ -28,7 +28,7 @@ router.get("/size/:size/page/:page/equipmentInfo", async(req, res)=>{
 
 router.put("/equipmentID/:equipmentID/borrowApply", async (req, res) => {
 	// console.log("Here!");
-	let ret = await userController.putBorrowApply(/*req.userInfo.id,*/req.body, req.params);
+	let ret = await userController.putBorrowApply(req.userInfo.id,req.userInfo.phone,req.body, req.params);
 	// 调用一个controller, 获得处理的数据结果, 赋值给了ret
 	res.send(ret).end();
 })

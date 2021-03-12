@@ -25,18 +25,13 @@ exports.tokenChecker = async (accesstoken) => {
     }
 }
 
-exports.putBorrowApply = async (/*stuID,*/body, params) => {
+exports.putBorrowApply = async (stuID,contactInfo, body, params) => {
     let ret;
     let equipmentID = params.equipmentID;
     let startTime = body.startTime;
     let reason = body.reason;
-    let contactInfo = body.contactInfo;
     let returnTime = body.returnTime;
-    // let result = await sso.getUserInformation(accesstoken).then();
-    // let stuID = result.id;
     let longestTime = await models.userModel.getLongestTime(equipmentID);
-    // console.log(longestTime);
-    let stuID = 3200104385;
     if (returnTime - startTime <= longestTime && returnTime > startTime) {
         let modelResult = await models.userModel.putBorrowApply(
             equipmentID,

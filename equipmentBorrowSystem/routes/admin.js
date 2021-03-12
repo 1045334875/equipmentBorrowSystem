@@ -8,7 +8,6 @@ router.use("/", async (req, res, next) => {
 
     if (ret.errorCode == 200) {
         req.userInfo = ret.payload;
-
         let stuID = req.userInfo.id;
         let result = await adminController.isAdmin(stuID);
         

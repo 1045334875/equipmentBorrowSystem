@@ -45,7 +45,7 @@ exports.putBorrowApply = async (
         let applySql =
             "INSERT INTO borrow_apply (equipmentID, stuID, startTime, contactInfo, reason, returnTime,state) VALUE (?, ?, ?, ?, ?, ?,?);"
         let equipmentSql=
-            "UPDATE equipment SET state = ? WHEWE equipmentID = ?"
+            "UPDATE equipment SET state = ? WHERE equipmentID = ?"
         let applyParam = [
             equipmentID,
             stuID,
@@ -112,11 +112,12 @@ exports.getBorrowedEquipment = async (
     try {
         var conn = await pool.getConnection();
         //SQL查询id,开始时间，结束时间
+        console.log(stuID);
         let equipmentSql = 
-            "SELECT equipmentID, startTime, returnTime FROM borrow_apply WHERE stuID = ?";
-        let equipmentParam = [stuID];
+            "SELECT equipmentID, startTime, returnTime FROM borrow_apply WHERE stuID = ? and state = ?";
+        let equipmentParam = [stuID, 1];
         let equipmentRes = await conn.query(equipmentSql, equipmentParam);
-        //console.log(equipmentRes[0][1].equipmentID);
+        // console.log(equipmentRes[0]);
         //提取id为数组
         let equipmentID = [];
         for ( let i = 0 ; i < equipmentRes[0].length ; i++) {
@@ -124,15 +125,17 @@ exports.getBorrowedEquipment = async (
         }
         //console.log(equipmentID);
         //SQL由id数组查询name
+        // console.log("equipmentID : " + equipmentID);
         let equipmentNameSql =
             "SELECT equipmentName FROM equipment WHERE equipmentID in (?)";
         let equipmentNameParam = [equipmentID];
         let equipmentNameRes = await conn.query(equipmentNameSql, equipmentNameParam);
         //将name合并到对象中
+        //console.log(equipmentRes[0]);
         for ( let i = 0 ; i < equipmentRes[0].length ; i++) {
             equipmentRes[0][i].equipmentName = equipmentNameRes[0][i].equipmentName;
         }
-        //console.log(equipmentRes[0]);
+        // console.log(equipmentRes[0]);
         return equipmentRes[0];
     } catch (err) {
         console.log("getBorrrowedEquipment Model Error" + err);
@@ -150,6 +153,8 @@ exports.putEquipmentRet = async (
     try {
         //连接数据库
         var conn = await pool.getConnection();
+        
+             
         //SQL修改设备状态为未借出
         let equipmentSql =
             "UPDATE equipment SET state = 0 WHERE equipmentID = ?";
@@ -184,7 +189,7 @@ exports.getequipmentInfo = async (
         var conn = await pool.getConnection();
         //查询摄像机/非摄像机的信息
         let equipmentSql =
-        " SELECT a.equipmentID, a.equipmentName, a.equipmentPicture, a.state, b.returnTime FROM equipment a LEFT JOIN (SELECT returnTime,equipmentID FROM borrow_apply WHERE state = 1) b ON a.equipmentid = b.equipmentID WHERE a.isCamera =1";
+        " SELECT a.equipmentID, a.equipmentName, a.equipmentPicture, a.state, b.returnTime FROM equipment a LEFT JOIN (SELECT returnTime,equipmentID FROM borrow_apply WHERE state = 1) b ON a.equipmentid = b.equipmentID WHERE a.isCamera = ?";
         let equipmentParam = [isCamera];
         let equipmentRet = await conn.query(equipmentSql, equipmentParam);
         let totalNum = equipmentRet[0].length;//得到摄像机/非摄像机的总数

@@ -6,7 +6,7 @@ const userController = require("../controller/user")
 module.exports = router;
 
 router.use("/", async (req, res, next) => {
-	let ret = await controller.tokenChecker(req.headers['access-token']);
+	let ret = await userController.tokenChecker(req.headers['access-token']);
 
 	if (ret.errorCode == 200) {
 		req.userInfo = ret.payload;
@@ -26,11 +26,11 @@ router.get("/size/:size/page/:page/equipmentInfo", async(req, res)=>{
   res.send(ret).end();
 })
 
-router.put("/equipmentID/:equipmentID/borrowApply", async (req, res) => {
-	// console.log("Here!");
-	let ret = await userController.putBorrowApply(/*req.userInfo.id,*/req.body, req.params);
-	// 调用一个controller, 获得处理的数据结果, 赋值给了ret
-	res.send(ret).end();
+router.put("/equipmentID/:equipmentID/borrowApply", async (req, res) => {
+    // console.log("Here!");
+    let ret = await userController.putBorrowApply(req.userInfo.id,req.userInfo.phone,req.body, req.params);
+    // 调用一个controller, 获得处理的数据结果, 赋值给了ret
+    res.send(ret).end();
 })
 
 //004.获取个人信息

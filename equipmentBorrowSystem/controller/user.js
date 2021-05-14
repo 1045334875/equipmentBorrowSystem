@@ -24,56 +24,51 @@ exports.tokenChecker = async (accesstoken) => {
     }
 }
 
-exports.putBorrowApply = async (/*stuID,*/body, params) => {
-    let ret;
-    let equipmentID = params.equipmentID;
-    let startTime = body.startTime;
-    let reason = body.reason;
-    let contactInfo = body.contactInfo;
-    let returnTime = body.returnTime;
-    // let result = await sso.getUserInformation(accesstoken).then();
-    // let stuID = result.id;
-    let longestTime = await models.userModel.getLongestTime(equipmentID);
-    // console.log(longestTime);
-    let stuID = 3200104385;
-    if (returnTime - startTime <= longestTime && returnTime > startTime) {
-        let modelResult = await models.userModel.putBorrowApply(
-            equipmentID,
-            startTime,
-            reason,
-            contactInfo,
-            returnTime,
-            stuID,
-        );
+exports.putBorrowApply = async (stuID,contactInfo, body, params) => {
+    let ret;
+    let equipmentID = params.equipmentID;
+    let startTime = body.startTime;
+    let reason = body.reason;
+    let returnTime = body.returnTime;
+    let longestTime = await models.userModel.getLongestTime(equipmentID);
+    if (returnTime - startTime <= longestTime && returnTime > startTime) {
+        let modelResult = await models.userModel.putBorrowApply(
+            equipmentID,
+            startTime,
+            reason,
+            contactInfo,
+            returnTime,
+            stuID,
+        );
 
-        if (modelResult) {
-            ret = {
-                errorCode: 200,
-                errorMsg: "借用成功",
-                payload: {},
-            };
-        } else {
-            ret = {
-                errorCode: 400,
-                errorMsg: "操作数据库出错",
-                payload: {},
-            };
-        }
-    } else if (!longestTime) {
-        ret = {
-            errorCode: 400,
-            errorMsg: "操作数据库出错",
-            payload: {},
-        };
-    } else {
-        ret = {
-            errorCode: 400,
-            errorMsg: "参数错误，借用失败",
-            payload: {},
-        };
-    }
+        if (modelResult) {
+            ret = {
+                errorCode: 200,
+                errorMsg: "借用成功",
+                payload: {},
+            };
+        } else {
+            ret = {
+                errorCode: 400,
+                errorMsg: "操作数据库出错",
+                payload: {},
+            };
+        }
+    } else if (!longestTime) {
+        ret = {
+            errorCode: 400,
+            errorMsg: "操作数据库出错",
+            payload: {},
+        };
+    } else {
+        ret = {
+            errorCode: 400,
+            errorMsg: "参数错误，借用失败",
+            payload: {},
+        };
+    }
 
-    return ret;
+    return ret;
 };
 
 
@@ -163,22 +158,43 @@ exports.putEquipmentRet = async (body, params, userInfo) => {
     //let result = await sso.getUserInfo(accesstoken).then();
     let stuID = userInfo.id;
     //let stuID = "3200106058";
-    let modelResult = await models.userModel.putEquipmentRet(equipmentID, stuID);
-    if (!modelResult) {
+
+    let equipmentBorrowed = await models.userModel.getBorrowedEquipment(stuID);
+    let flag = 0;
+
+    // console.log(equipmentBorrowed);
+    
+    if(equipmentBorrowed) {
+        for(let i = 0; i < equipmentBorrowed.length; i++) {
+            if(equipmentBorrowed[i].equipmentID == equipmentID) flag = 1;
+        }
+    }
+
+    if(flag == 0) {
         ret = {
             errorCode: 400,
-            errorMsg: "操作数据库出错，归还失败",
+            errorMsg: "归还设备不正确，归还失败",
             payload: {}
-        };
+        }
     } else {
-        ret = {
-            errorCode: 200,
-            errorMsg: "成功归还设备",
-            payload: {}
-        };
-    }
+        let modelResult = await models.userModel.putEquipmentRet(equipmentID, stuID);
+        if (!modelResult) {
+            ret = {
+                errorCode: 400,
+                errorMsg: "操作数据库出错，归还失败",
+                payload: {}
+            };
+        } else {
+            ret = {
+                errorCode: 200,
+                errorMsg: "成功归还设备",
+                payload: {}
+            };
+        }
+    }    
     return ret;
 };
+
 exports.getequipmentInfo = async (body, params) => {
     let isCamera = body.isCamera;
     let size = params.size;

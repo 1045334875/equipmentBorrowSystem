@@ -1,6 +1,7 @@
 const pool = require("./pool");
 const mysql = require("mysql2");
 
+
 //添加设备
 exports.putEquipmentAdd = async (
     equipmentID,
@@ -51,6 +52,31 @@ exports.deleteEquipmentDelete = async (
         await conn.release();
     }
 };
+
+// 获取设备借出状态
+exports.getEquipmentState = async (
+    equipmentID
+) => {
+    try {
+        var conn = await pool.getConnection();
+        
+        let equipmentSql =
+            "SELECT state FROM equipment WHERE equipmentID = ?";
+        let equipmentParam = [equipmentID];
+        let equipmentRes = await conn.query(equipmentSql, equipmentParam);
+    
+        if (!equipmentRes[0][0]) {
+            throw new Error("equipmentID有误");
+        }
+        let state = equipmentRes[0][0].state;
+        return state;
+    } catch (err) {
+        console.log("getEquipmentState Model Error" + err);
+        return null;
+    } finally {
+        await conn.release();
+    }
+}
 
 // 获取借出设备
 exports.getEquipmentOnLoan = async () => {

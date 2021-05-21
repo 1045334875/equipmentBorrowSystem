@@ -130,7 +130,6 @@ exports.getBorrowedEquipment = async (body, params, userInfo) => {
     let ret;
 
     let stuID = userInfo.id;
-    //stuID = "3200106058";
     let borrowedEquipment = await models.userModel.getBorrowedEquipment(stuID);
 
     if (!borrowedEquipment) {

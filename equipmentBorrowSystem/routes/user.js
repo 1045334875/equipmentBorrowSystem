@@ -6,7 +6,7 @@ const userController = require("../controller/user")
 module.exports = router;
 
 router.use("/", async (req, res, next) => {
-	let ret = await controller.tokenChecker(req.headers['access-token']);
+	let ret = await userController.tokenChecker(req.headers['access-token']);
 
 	if (ret.errorCode == 200) {
 		req.userInfo = ret.payload;

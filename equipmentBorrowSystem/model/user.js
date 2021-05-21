@@ -184,10 +184,12 @@ exports.getequipmentInfo = async (
         var conn = await pool.getConnection();
         //查询摄像机/非摄像机的信息
         let equipmentSql =
-        " SELECT a.equipmentID, a.equipmentName, a.equipmentPicture, a.state, b.returnTime FROM equipment a LEFT JOIN (SELECT returnTime,equipmentID FROM borrow_apply WHERE state = 1) b ON a.equipmentid = b.equipmentID WHERE a.isCamera =1";
+        " SELECT a.equipmentID, a.equipmentName, a.equipmentPicture, a.state, b.returnTime FROM equipment a LEFT JOIN (SELECT returnTime,equipmentID FROM borrow_apply WHERE state = 1) b ON a.equipmentid = b.equipmentID WHERE a.isCamera =?";
         let equipmentParam = [isCamera];
         let equipmentRet = await conn.query(equipmentSql, equipmentParam);
         let totalNum = equipmentRet[0].length;//得到摄像机/非摄像机的总数
+       // console.log(totalNum);
+       // console.log(equipmentRet[0]);
         if(!totalNum){
             throw new Error("isCamera 有误");
         }

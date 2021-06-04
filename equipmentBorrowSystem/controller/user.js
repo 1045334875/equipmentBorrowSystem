@@ -195,8 +195,8 @@ exports.putEquipmentRet = async (body, params, userInfo) => {
     return ret;
 };
 
-exports.getequipmentInfo = async (body, params) => {
-    let isCamera = body.isCamera;
+exports.getequipmentInfo = async (params) => {
+    let isCamera = params.isCamera;
     let size = params.size;
     let page = params.page;
     let data =[];

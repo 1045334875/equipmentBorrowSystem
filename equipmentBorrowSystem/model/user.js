@@ -43,7 +43,7 @@ exports.putBorrowApply = async (
         var conn = await pool.getConnection();
 
         let applySql =
-            "INSERT INTO borrow_apply (equipmentID, stuID, startTime, contactInfo, reason, returnTime,state) VALUE (?, ?, ?, ?, ?, ?,?);"
+            "INSERT INTO borrow_apply (equipmentID, stuID, startTime, contactInfo, reason, returnTime, state) VALUE (?, ?, ?, ?, ?, ?,?);"
         let equipmentSql=
             "UPDATE equipment SET state = ? WHERE equipmentID = ?"
         let applyParam = [
@@ -189,13 +189,10 @@ exports.getequipmentInfo = async (
         var conn = await pool.getConnection();
         //查询摄像机/非摄像机的信息
         let equipmentSql =
-        " SELECT a.equipmentID, a.equipmentName, a.equipmentPicture, a.state, b.returnTime FROM equipment a LEFT JOIN (SELECT returnTime,equipmentID FROM borrow_apply WHERE state = 1) b ON a.equipmentid = b.equipmentID WHERE a.isCamera = ?";
+        " SELECT equipmentID, equipmentName, equipmentPicture, state FROM equipment WHERE isCamera = ?";
         let equipmentParam = [isCamera];
         let equipmentRet = await conn.query(equipmentSql, equipmentParam);
         let totalNum = equipmentRet[0].length;//得到摄像机/非摄像机的总数
-        if(!totalNum){
-            throw new Error("isCamera 有误");
-        }
         let result ={
             totalNum: totalNum,
             data: equipmentRet[0],

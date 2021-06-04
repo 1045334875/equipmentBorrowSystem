@@ -2,10 +2,10 @@ var mysql =require("mysql2/promise");
 
 module.exports = (function(){
     var pool = mysql.createPool({
-        host: 'localhost',
-        user: 'root',
-        password: 'Apocrypha332528',
-        database: 'equipmentborrowsystem',
+        host: '10.79.250.37',
+        user: 'zjutv_pro',
+        password: 'zjutv_pro2020',
+        database: 'equipmentBorrowSystem',
     })
     
     pool.on("connection",function(connection){

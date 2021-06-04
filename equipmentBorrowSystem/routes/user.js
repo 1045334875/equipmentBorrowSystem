@@ -20,9 +20,9 @@ router.use("/", async (req, res, next) => {
 		res.send(message).end();
 	}
 })
-
-router.get("/size/:size/page/:page/equipmentInfo", async(req, res)=>{
-  let ret = await userController.getequipmentInfo(req.body,req.params);
+//001.获取设备信息
+router.get("/size/:size/page/:page/isCamera/:isCamera/equipmentInfo", async(req, res)=>{
+  let ret = await userController.getequipmentInfo(req.params);
   res.send(ret).end();
 })
 

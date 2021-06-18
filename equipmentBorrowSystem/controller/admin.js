@@ -82,14 +82,37 @@ exports.isAdmin = async (stuID) => {
 
 exports.getEquipmentOnLoan = async () => {
     let ret;
+    let size = params.size;
+    let page = params.page;
+    let data =[];
     let modelResult = await adminModel.getEquipmentOnLoan();
 
     if (modelResult) {
-        ret = {
-            errorCode: 200,
-            errorMsg: "成功返回已借出设备",
-            payload: modelResult 
+        let totalNum = modelResult.totalNum;
+        let equipmentRet = modelResult.data;
+        //console.log(totalNum,equipmentRet);
+        let start = (page-1)*size;
+        let end = Math.min(start + parseInt(size),totalNum);
+        //console.log(start,end,start + size);
+        for (let i=start; i<end; i++){
+            data.push( equipmentRet[i]);
         }
+        if(data == false){
+                ret = {
+                errorCode: 400,
+                errorMsg: "page 参数出错",
+                payload: {}
+            };
+        } else{
+            ret = {
+                errorCode: 200,
+                errorMsg: "成功返回设备信息",
+                payload: {
+                totalNum: totalNum,
+                data: data,
+                }
+            };
+        }   
     } else {
         ret = {
             errorCode: 400,

@@ -108,8 +108,12 @@ exports.getEquipmentOnLoan = async () => {
                 }
             }
         }
-
-        return equipmentRes[0];
+        let totalNum = len;
+        let result = {
+            totalNum: totalNum,
+            data: equipmentRes[0],
+        };
+        return result;
     } catch (err) {
         console.log("getEquipmentOnLoan Model Error" + err);
         return null;

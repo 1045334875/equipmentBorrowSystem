@@ -101,7 +101,7 @@ exports.getUserInfo = async (body, params, userInfo) => {
     let ret;
 
     let stuID = userInfo.id;
-    //console.log(stuID);
+    console.log(stuID);
     //let stuID = "3200106058";
     let userResult = await models.userModel.getUserInfo(stuID);
     //let userResult = {ss:1};

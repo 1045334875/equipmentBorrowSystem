@@ -82,15 +82,15 @@ exports.getUserInfo = async (
         //SQL查询
         //console.log(stuID);
         let userSql = 
-            "SELECT name, department, departmentName, position, stuPicture, borrowTime FROM user_info WHERE stuID = ?";
+            "SELECT name, department, departmentName, position, contactInfo, stuPicture, borrowTime FROM user_info WHERE stuID = ?";
         let userParam = [stuID];
         let userRes = await conn.query(userSql, userParam);
-        //console.log(userRes[0][0]);
+        console.log(userRes[0][0]);
         let privilegeSql = 
             "SELECT id FROM admin WHERE id = ?";
         let privilegeParam = [stuID];
         let privilegeRes = await conn.query(privilegeSql, privilegeParam);
-        console.log(privilegeRes[0][0]);
+        // console.log(privilegeRes[0][0]);
         if(privilegeRes[0][0])  {
             userRes[0][0].privilege = 1;
         }else  {
@@ -134,6 +134,7 @@ exports.getBorrowedEquipment = async (
         //console.log(equipmentRes[0]);
         for ( let i = 0 ; i < equipmentRes[0].length ; i++) {
             equipmentRes[0][i].equipmentName = equipmentNameRes[0][i].equipmentName;
+            equipmentRes[0][i].isCamera = equipmentRes[0][i].isCamera;
         }
         // console.log(equipmentRes[0]);
         return equipmentRes[0];
